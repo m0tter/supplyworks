@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es5",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "supplyworks": ["../common/supplyworks"]
+    },
+    "removeComments": false,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "exclude": [
+    ".git",
+    "node_modules",
+    ".tmp"
+  ]
+}
