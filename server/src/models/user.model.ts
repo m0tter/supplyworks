@@ -4,11 +4,11 @@ import { UserBase } from 'supplyworks';
 let UserSchema = new Schema({
   firstName: String,
   lastName: String,
-  username: String,
   password: String,
   email: String,
   mobilePhone: String,
-  isAdmin: Boolean
+  isAdmin: Boolean,
+  schoolId: Schema.Types.ObjectId
 });
 
 export interface UserDocument extends UserBase, Document { }
