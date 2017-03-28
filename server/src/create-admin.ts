@@ -4,7 +4,7 @@ import * as config from './config';
 
 mongoose.connect(config.connectionStringLocalDB);
 var newUser = new UserModel;
-newUser.username = 'admin';
+newUser.email = 'admin';
 newUser.password = 'admin';
 newUser.isAdmin = true;
 newUser.save((err, result) => {
