@@ -1,10 +1,10 @@
 import { Application } from 'express';
-
+import { API_AGREEMENTS } from '../config';
 import { AgreementAPI } from '../api/agreement.api';
 
 export class Router {
   constructor( private application: Application ) { 
-    application.use( '/v1/api/agreements', new AgreementAPI().router )
+    application.use( API_AGREEMENTS, new AgreementAPI().router )
   }
 }
 

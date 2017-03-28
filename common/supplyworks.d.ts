@@ -8,7 +8,10 @@ declare module 'supplyworks' {
     isAdmin: boolean;
     schoolId: string;
   }
+
   export interface User extends UserBase {
     _id?: string;
   }
+
+  export const AGREEMENT_API = '';
 }
