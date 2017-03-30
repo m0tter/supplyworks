@@ -13,5 +13,21 @@ declare module 'supplyworks' {
     _id?: string;
   }
 
-  export const AGREEMENT_API = '';
+  export interface Address {
+    line1: string;
+    line2: string;
+    suburb: string;
+    state: string;
+    country :string;
+  }
+
+    export interface EmployerBase {
+    name: string;
+    address: Address[];
+    contact: UserBase;
+  }
+
+  export interface Employer extends EmployerBase {
+    _id?: string;
+  }
 }

@@ -35,18 +35,3 @@ export class AuthAPI {
     response.status( 500 ).send('Error in auth.api.ts - ' + (error.message || error));
   }
 }
-
-export function TokenCheck(req: Request, res: Response, next: NextFunction){
-      var token: string;
-      if( req && req.headers['x-access-token']) token = req.headers['x-access-token'];
-      if( token ) {
-        jwt.verify( token, AUTH_SECRET, ( err: any, decoded: jwt.VerifyCallback ) => {
-          if( err ) res.status( 401 ).json({ 'success': 'false', 'message': '401 - NOT AUTHORISED' });
-          else {
-            req.token = 
-            next();
-          }
-        });
-      } else { res.status( 401 ).send('401 - NOT AUTHORISED') };
-    });
-}

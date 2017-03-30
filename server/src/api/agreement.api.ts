@@ -6,9 +6,7 @@ import { Router, Request } from 'express';
 import * as bparser     from 'body-parser';
 import * as jwt         from 'jsonwebtoken';
 import { AUTH_SECRET }  from '../config';
-import { TokenCheck }   from './auth.api';
-
-interface AuthRequest extends Request { token: string; }
+import { TokenCheck }   from '../utils';
 
 export class AgreementAPI {
   public router = Router();
@@ -16,25 +14,12 @@ export class AgreementAPI {
   constructor() { this.buildRouter(); }
   
   buildRouter(): void {
-    // this.router.use(bparser.json(), (req: AuthRequest, res, next) => {
-    //   var token: string;
-    //   if( req && req.headers['x-access-token']) token = req.headers['x-access-token'];
-    //   if( token ) {
-    //     jwt.verify( token, AUTH_SECRET, ( err: any, decoded: jwt.VerifyCallback ) => {
-    //       if( err ) res.status( 401 ).json({ 'success': 'false', 'message': '401 - NOT AUTHORISED' });
-    //       else {
-    //         req.token = 
-    //         next();
-    //       }
-    //     });
-    //   } else { res.status( 401 ).send('401 - NOT AUTHORISED') };
-    // });
     this.router.use((req, res, next) => {
       TokenCheck(req, res, next);
     })
 
     this.router.get('/', (req, res) => {
-      
+      res.status(200).send('its all good');
     });
   }
 }

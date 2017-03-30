@@ -1,7 +1,7 @@
 import { Model, Schema, Document, model } from 'mongoose';
 import { UserBase } from 'supplyworks';
 
-let UserSchema = new Schema({
+export var UserSchema = new Schema({
   firstName: String,
   lastName: String,
   password: { type: String, required: true },
