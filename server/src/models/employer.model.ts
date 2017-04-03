@@ -17,7 +17,7 @@ let AddressSchema = new m.Schema({
 let EmployerSchema = new m.Schema({
   name: String,
   address: [AddressSchema],
-  contact: UserSchema
+  contact: [m.Schema.Types.ObjectId]
 });
 
 export interface AddressDocument extends Address, m.Document { }

@@ -24,7 +24,7 @@ declare module 'supplyworks' {
     export interface EmployerBase {
     name: string;
     address: Address[];
-    contact: UserBase;
+    contactId: string;
   }
 
   export interface Employer extends EmployerBase {
