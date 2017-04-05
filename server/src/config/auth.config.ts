@@ -5,3 +5,4 @@
 export const AUTH_SECRET = 'ad89/8g=b~ff)8)~Yy8}4Q3vW(c0D4';
 export const AUTH_EXPIRY = "1d";
 export const PRIVATE_KEY = 'KXSWR#hf,~CZeLPv{5EQ#`Zj~Erj[%';
+export const SALT_WORK_FACTOR = 10;

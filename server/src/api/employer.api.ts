@@ -4,9 +4,10 @@
 
 import { Router, Response } from 'express';
 import * as bpsr            from 'body-parser';
-import { Employer }         from 'supplyworks';
+import { Employer, User }         from 'supplyworks';
 import { TokenCheck }       from '../utils';
 import { AuthRequest }      from '../types';
+import { UserModel }        from '../models/user.model';
 
 import { 
   EmployerModel, 
@@ -21,23 +22,39 @@ export class EmployerAPI {
 
   buildRouter(): void {
 
-    this.router.post('/', bpsr.json(), (req, res) => {
-      let empNew = req.body as Employer;
+    this.router.post('/new', bpsr.json(), (req, res) => {
       let empDoc = new EmployerModel;
-      if( empNew ) {
-        if(empNew.name && empNew.address && empNew.contactId) {
-          empDoc.name = empNew.name;
-          empDoc.address = empNew.address;
-          empDoc.contactId = empNew.contactId;
-          
-          empDoc.save((err, result) => {
-            if( err ) {
-              this.errorHandler(err, res);
-            } else {
-              if( result ) { 
-                res.status(200).json({'success': true, 'data': result});
-              } else {
-                res.status(500).json({'success': false, 'data': 'there was no data returned during save'});
+      let userDoc = new UserModel;
+      let empNew = req.body.employer as Employer;
+      let userNew = req.body.user as User;
+      if( userNew ) {
+        if(userNew.lastName && userNew.firstName && userNew.email && userNew.password) {
+          userDoc.firstName = userNew.firstName;
+          userDoc.lastName = userNew.lastName;
+          userDoc.email = userNew.email;
+          userDoc.password = userNew.password;
+
+          userDoc.save((err, savedUser) => {
+            if(err) this.errorHandler(err, res);
+            else {
+              if( empNew ) {
+                if(empNew.name && empNew.address) {
+                  empDoc.name = empNew.name;
+                  empDoc.address = empNew.address;
+                  empDoc.contactId = savedUser._id;
+            
+                  empDoc.save((err, result) => {
+                    if( err ) {
+                      this.errorHandler(err, res);
+                    } else {
+                      if( result ) { 
+                        res.status(200).json({'success': true, 'data': result});
+                      } else {
+                        res.status(500).json({'success': false, 'data': 'there was no data returned during save'});
+                      }
+                    }
+                  });
+                }
               }
             }
           });
@@ -96,7 +113,7 @@ export class EmployerAPI {
                 let data = req.body as Employer;
                 if(data.name) doc.name = data.name;
                 if(data.address) doc.address = data.address;
-                if(data.contact) doc.contact = data.contact;
+                // if(data.contact) doc.contact = data.contact;
                 doc.save((err, result) => {
                   if(err){
                     this.errorHandler(err, res);

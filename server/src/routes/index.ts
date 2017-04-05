@@ -2,10 +2,12 @@ import { Application }  from 'express';
 import { AgreementAPI } from '../api/agreement.api';
 import { AuthAPI }      from '../api/auth.api';
 import { EmployerAPI }  from '../api/employer.api';
+import { UserAPI }      from '../api/user.api';
 import { 
   API_AGREEMENTS, 
   API_AUTH,
-  API_EMPLOYER
+  API_EMPLOYER,
+  API_USER
 } from '../config';
 
 export class Router {
@@ -13,6 +15,7 @@ export class Router {
     application.use( API_AUTH, new AuthAPI().router ); 
     application.use( API_AGREEMENTS, new AgreementAPI().router );
     application.use( API_EMPLOYER, new EmployerAPI().router );
+    application.use( API_USER, new UserAPI().router );
   }
 }
 

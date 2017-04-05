@@ -4,7 +4,6 @@
 
 import * as m from 'mongoose';
 import { EmployerBase, Address } from 'supplyworks';
-import { UserSchema } from './user.model';
 
 let AddressSchema = new m.Schema({
   line1: String,
@@ -17,7 +16,7 @@ let AddressSchema = new m.Schema({
 let EmployerSchema = new m.Schema({
   name: String,
   address: [AddressSchema],
-  contact: [m.Schema.Types.ObjectId]
+  contactId: m.Schema.Types.ObjectId
 });
 
 export interface AddressDocument extends Address, m.Document { }
