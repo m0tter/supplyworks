@@ -33,6 +33,7 @@ export class EmployerAPI {
           userDoc.lastName = userNew.lastName;
           userDoc.email = userNew.email;
           userDoc.password = userNew.password;
+          userDoc.isAdmin = true;
 
           userDoc.save((err, savedUser) => {
             if(err) this.errorHandler(err, res);
@@ -50,7 +51,7 @@ export class EmployerAPI {
                       if( result ) { 
                         res.status(200).json({'success': true, 'data': result});
                       } else {
-                        res.status(500).json({'success': false, 'data': 'there was no data returned during save'});
+                        res.status(500).send('there was no data returned during save');
                       }
                     }
                   });
@@ -93,7 +94,7 @@ export class EmployerAPI {
             if(emp._id === req.token.schoolId){
               res.status(200).json({'success': true, 'data': emp});
             } else {
-              res.status(401).json({'success': false, 'data': 'not authorised'});
+              res.status(401).send('401 - not authorised');
             }
           } else {
             res.status(200).json({'success': true, 'data': null});
@@ -124,7 +125,7 @@ export class EmployerAPI {
                   }
                 });
               } else {
-                res.status(401).json({'success': 'false', 'data': 'not authorised'});
+                res.status(401).send('401 - not authorised');
               }
             }
           }
@@ -136,7 +137,7 @@ export class EmployerAPI {
   errorHandler(error: any, res?: Response){
     console.error('An error occurred in employer.api.ts: ' + error.message || error);
     if(res) {
-      res.status(500).json({ 'success': 'false', 'data': (error.message || error)});
+      res.status(500).send(error.message || error);
     }
   }
 }

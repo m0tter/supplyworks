@@ -12,7 +12,10 @@
     ],
     "outDir": "../out-tsc/app",
     "module": "es2015",
-    "baseUrl": "",
+    "baseUrl": ".",
+    "paths": {
+      "supplyworks": ["../../common/supplyworks"]
+    },
     "types": []
   },
   "exclude": [

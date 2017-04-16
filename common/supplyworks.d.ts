@@ -6,7 +6,7 @@ declare module 'supplyworks' {
     email: string;
     mobilePhone: string;
     isAdmin: boolean;
-    schoolId: string;
+    employerId: string;
   }
 
   export interface User extends UserBase {
@@ -25,6 +25,8 @@ declare module 'supplyworks' {
     name: string;
     address: Address[];
     contactId: string;
+    casualId: string[];
+    employeeId: string[];
   }
 
   export interface Employer extends EmployerBase {

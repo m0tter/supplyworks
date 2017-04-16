@@ -10,7 +10,7 @@ var UserSchema = new Schema({
   email: { type: String, required: true, index: { unique: true }},
   mobilePhone: String,
   isAdmin: Boolean,
-  schoolId: Schema.Types.ObjectId
+  employerId: Schema.Types.ObjectId
 });
 
 UserSchema.pre('save', function(next) {
@@ -29,7 +29,7 @@ UserSchema.pre('save', function(next) {
   });
 });
 
-UserSchema.methods.comparePassword = (passwordToCheck:string, cb:Function) => {
+UserSchema.methods.comparePassword = function(passwordToCheck:string, cb:Function) {
   bcrypt.compare(passwordToCheck, this.password, (err, isMatch) => {
     if(err) return cb(err);
     cb(null, isMatch);
