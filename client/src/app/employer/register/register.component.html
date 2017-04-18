@@ -1,3 +1,46 @@
-<p>
-  register works!
-</p>
+<div class="container">
+  <form [formGroup]="registerForm" (ngSubmit)="doRegister($event)">
+    <div>
+      <md-input-container>
+       <input mdInput formControlName="schoolName" type="text" placeholder="school name" size="50">
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="firstName" type="text" placeholder="first name">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="lastName" type="text" placeholder="last name">
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="phone" type="text" placeholder="mobile phone">
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="email" type="email" placeholder="email" size="30">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="password" type="password" placeholder="password">
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="addrLine1" type="text" placeholder="address line 1" size="30">
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="addrLine2" type="text" placeholder="address line 2" size="30">
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="suburb" type="text" placeholder="suburb/town">
+      </md-input-container>
+    </div>
+    <button md-raised-button color="primary" type="submit">Register</button>
+  </form>
+</div>

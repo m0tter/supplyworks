@@ -7,7 +7,8 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'casual', loadChildren: 'app/casual/casual.module#CasualModule' },
-  { path: 'employer', loadChildren: 'app/employer/employer.module#EmployerModule' }
+  { path: 'employer', loadChildren: 'app/employer/employer.module#EmployerModule' },
+  { path: 'employee', loadChildren: 'app/employee/employee.module#EmployeeModule' }
 ];
 
 @NgModule({

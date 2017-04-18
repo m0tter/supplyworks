@@ -1,8 +1,11 @@
 import { NgModule }  from '@angular/core';
-import { FormsModule }  from '@angular/forms';
+import { ReactiveFormsModule }  from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
+import { MaterialModule } from '@angular/material';
+
+import { RegisterService } from './services';
 
 import { EmployerComponent } from './employer.component';
 import { RegisterComponent } from './register/register.component';
@@ -18,12 +21,15 @@ const routes: Routes = [
     RegisterComponent
   ],
   imports: [
-    FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MaterialModule.forRoot()
   ],
-  providers: []
+  providers: [
+    RegisterService
+  ]
 })
 export class EmployerModule { }
 
