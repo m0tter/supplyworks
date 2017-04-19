@@ -22,7 +22,7 @@ export class EmployerAPI {
 
   buildRouter(): void {
 
-    this.router.post('/new', bpsr.json(), (req, res) => {
+    this.router.post('/register', bpsr.json(), (req, res) => {
       let empDoc = new EmployerModel;
       let userDoc = new UserModel;
       let empNew = req.body.employer as Employer;

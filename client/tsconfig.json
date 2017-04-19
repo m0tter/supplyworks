@@ -17,7 +17,8 @@
       "dom"
     ],
     "paths": {
-      "supplyworks": ["../common/supplyworks"]
+      "supplyworks": ["../../common/supplyworks"],
+      "api-paths": ["./app/_api.paths"]
     }
   }
 }

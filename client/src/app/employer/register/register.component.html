@@ -2,8 +2,9 @@
   <form [formGroup]="registerForm" (ngSubmit)="doRegister($event)">
     <div>
       <md-input-container>
-       <input mdInput formControlName="schoolName" type="text" placeholder="school name" size="50">
+       <input mdInput formControlName="schoolName" placeholder="school name" size="50">
       </md-input-container>
+      <div>Required</div>
     </div>
     <div>
       <md-input-container>
@@ -41,6 +42,6 @@
         <input mdInput formControlName="suburb" type="text" placeholder="suburb/town">
       </md-input-container>
     </div>
-    <button md-raised-button color="primary" type="submit">Register</button>
+    <button md-raised-button [disabled]="!registerForm.valid" color="primary" type="submit">Register</button>
   </form>
 </div>
