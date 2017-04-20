@@ -14,10 +14,16 @@ export class RegisterService {
 
   constructor( private http: Http ) { }
 
-  Register(employer: Employer, user: User):Promise<Employer> {
-    var data = {'employer': employer, 'user': user};
-    return this.http.post(API_EMPLOYER['register'], data)
+  Register(employer: Employer, user: User):Promise<any> {
+    var data = JSON.stringify({'employer': employer, 'user': user});
+    console.log('data: ' + data);
+    return this.http.post(API_EMPLOYER.register, data)
       .toPromise()
-      .then(resp => { return resp.json().data as Employer });
+      .then(resp => { 
+        let result = resp.json().data;
+        if(result.success) return Promise.resolve(result.data);
+        else return Promise.reject('Error processing registration');
+      })
+      .catch(err => { return Promise.reject(err); });
   }
 }

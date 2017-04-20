@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
   public address: Address;
   public registerForm: FormGroup;
   public registering = false;
+  public result = '';
 
   constructor( private fb: FormBuilder, private registerService: RegisterService ) {
     this.employer = {name: '', address: [], contactId: '', employeeId: [], casualId: []};
@@ -42,7 +43,8 @@ export class RegisterComponent implements OnInit {
     this.registering = true;
     if(this.registerForm.dirty && this.registerForm.valid) {
       this.registerService.Register(this.employer, this.adminUser)
-        .then(res => { })
+        .then(res => { this.result = res; })
+        .catch( err => { this.result = 'Error: ' + err });
     }
   }
 

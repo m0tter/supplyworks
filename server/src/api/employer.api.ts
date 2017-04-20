@@ -59,7 +59,11 @@ export class EmployerAPI {
               }
             }
           });
+        } else {
+          res.status(200).json({'success': false, 'data': 'missing user information'});
         }
+      } else {
+        res.status(200).json({'success': false, 'data': 'user record missing'});
       }
     });
 

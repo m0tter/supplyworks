@@ -14,7 +14,8 @@
     "module": "es2015",
     "baseUrl": ".",
     "paths": {
-      "supplyworks": ["../../common/supplyworks"]
+      "supplyworks": ["../../common/supplyworks"],
+      "api-paths": ["app/_api.paths"]
     },
     "types": []
   },
