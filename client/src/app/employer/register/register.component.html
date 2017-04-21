@@ -2,47 +2,53 @@
   <form [formGroup]="registerForm" (ngSubmit)="doRegister($event)">
     <div>
       <md-input-container>
-       <input mdInput formControlName="schoolName" placeholder="school name" size="50">
-      </md-input-container>
-      <div>Required</div>
-    </div>
-    <div>
-      <md-input-container>
-        <input mdInput formControlName="firstName" type="text" placeholder="first name">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="lastName" type="text" placeholder="last name">
+       <input mdInput formControlName="name" placeholder="school name" size="50" required>
       </md-input-container>
     </div>
-    <div>
-      <md-input-container>
-        <input mdInput formControlName="phone" type="text" placeholder="mobile phone">
-      </md-input-container>
+    <div formGroupName="user">
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="firstName" type="text" placeholder="first name" required>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput formControlName="lastName" type="text" placeholder="last name" required>
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="mobilePhone" type="text" placeholder="mobile phone" required>
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="email" type="email" placeholder="email" size="30" required>
+        </md-input-container>
+        <md-input-container>
+          <input mdInput formControlName="password" type="password" placeholder="password" required>
+        </md-input-container>
+      </div>
     </div>
-    <div>
-      <md-input-container>
-        <input mdInput formControlName="email" type="email" placeholder="email" size="30">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="password" type="password" placeholder="password">
-      </md-input-container>
+    <div formGroupName="address">
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="line1" type="text" placeholder="address line 1" size="30" required>
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="line2" type="text" placeholder="address line 2" size="30">
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="suburb" type="text" placeholder="suburb/town" required>
+        </md-input-container>
+      </div>
     </div>
-    <div>
-      <md-input-container>
-        <input mdInput formControlName="addrLine1" type="text" placeholder="address line 1" size="30">
-      </md-input-container>
+    <div class="registerButton">
+      <button md-raised-button [disabled]="!registerForm.valid || registering" color="primary" type="submit">Register</button>
+      <img *ngIf="registering" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
     </div>
-    <div>
-      <md-input-container>
-        <input mdInput formControlName="addrLine2" type="text" placeholder="address line 2" size="30">
-      </md-input-container>
-    </div>
-    <div>
-      <md-input-container>
-        <input mdInput formControlName="suburb" type="text" placeholder="suburb/town">
-      </md-input-container>
-    </div>
-    <button md-raised-button [disabled]="!registerForm.valid" color="primary" type="submit">Register</button>
   </form>
   <p>
     result: {{result}}

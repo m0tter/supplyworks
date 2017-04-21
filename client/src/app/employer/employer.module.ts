@@ -6,19 +6,23 @@ import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 
 import { RegisterService } from './services';
+import { AuthenticationService } from './services';
 
 import { EmployerComponent } from './employer.component';
 import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: '', component: EmployerComponent },
-  { path: 'register', component: RegisterComponent }
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent }
 ]
 
 @NgModule({
   declarations: [
     EmployerComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -28,7 +32,8 @@ const routes: Routes = [
     MaterialModule.forRoot()
   ],
   providers: [
-    RegisterService
+    RegisterService,
+    AuthenticationService
   ]
 })
 export class EmployerModule { }
