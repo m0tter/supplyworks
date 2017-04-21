@@ -27,12 +27,14 @@ export class EmployerAPI {
       let userDoc = new UserModel;
       let empNew = req.body.employer as Employer;
       let userNew = req.body.user as User;
+
       if( userNew ) {
         if(userNew.lastName && userNew.firstName && userNew.email && userNew.password) {
           userDoc.firstName = userNew.firstName;
           userDoc.lastName = userNew.lastName;
           userDoc.email = userNew.email;
           userDoc.password = userNew.password;
+          userDoc.mobilePhone = userNew.mobilePhone;
           userDoc.isAdmin = true;
 
           userDoc.save((err, savedUser) => {
@@ -42,6 +44,7 @@ export class EmployerAPI {
                 if(empNew.name && empNew.address) {
                   empDoc.name = empNew.name;
                   empDoc.address = empNew.address;
+                  empDoc.employeeId = savedUser._id;
                   empDoc.contactId = savedUser._id;
             
                   empDoc.save((err, result) => {

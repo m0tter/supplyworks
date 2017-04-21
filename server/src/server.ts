@@ -1,5 +1,6 @@
 import { Application, Request, Response } from 'express';
 import * as express from 'express';
+import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
@@ -11,6 +12,7 @@ let app:Application = express();
 
 mongoose.connect( dbConfig.connectionStringLocalDB );
 app.use( morgan('dev') );
+app.use(helmet());
 
 app.use(cors());
 app.options('*', cors());
