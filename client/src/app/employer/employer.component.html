@@ -1,2 +1,4 @@
-<a routerLink="register">Register</a>
-<a routerLink="login">Login</a>
+<a *ngIf="!isLoggedIn()" routerLink="register">Register</a>
+<a *ngIf="!isLoggedIn()" routerLink="login">Login</a>
+<a *ngIf="isLoggedIn()" routerLink="." (click)="logout()">Logout</a>
+<a *ngIf="isLoggedIn()" routerLink="edit">Edit</a>

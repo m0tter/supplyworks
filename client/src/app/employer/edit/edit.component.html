@@ -1,0 +1,26 @@
+<div class="container">
+  <form [formGroup]="editForm" (ngSubmit)="doEdit($event)">
+    <div>
+      <md-input-container>
+        <input mdInput formControlName="name" placeholder="School Name" size="50">
+      </md-input-container>
+    </div>
+    <div formGroupName="address">
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="line1" placeholder="Address line 1" size="30">
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="line2" placeholder="Address line 2" size="30">
+        </md-input-container>
+      </div>
+      <div>
+        <md-input-container>
+          <input mdInput formControlName="suburb" placeholder="Suburb/Town" size="30">
+        </md-input-container>
+      </div>
+    </div>
+  </form>
+</div>

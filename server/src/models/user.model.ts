@@ -32,11 +32,11 @@ UserSchema.pre('save', function(next) {
 UserSchema.methods.comparePassword = function(passwordToCheck:string, cb:Function) {
   bcrypt.compare(passwordToCheck, this.password, (err, isMatch) => {
     if(err) return cb(err);
-    cb(null, isMatch);
+    cb(isMatch);
   });
 }
 
 // TODO limit number of password attempts
-
-export interface UserDocument extends UserBase, Document { }
+interface ComparePasswordCallbackType { (isMatch: boolean):void }
+export interface UserDocument extends UserBase, Document { comparePassword(password: string, callback: ComparePasswordCallbackType): void }
 export const UserModel = model<UserDocument>('Users', UserSchema);

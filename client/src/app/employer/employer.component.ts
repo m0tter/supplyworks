@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from './services';
 
 @Component({
   selector: 'app-employer',
@@ -7,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmployerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthenticationService) { }
 
+  isLoggedIn(): boolean { return this.authService.token && true }
+
+  logout(): void {
+    this.authService.logout();
+  }
+  
   ngOnInit() {
   }
 

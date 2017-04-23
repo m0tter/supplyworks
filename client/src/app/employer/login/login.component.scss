@@ -1,0 +1,33 @@
+@import "../../_palette";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+}
+.lostPassword {
+  padding-top: 20px;
+  font-size: 0.8em;
+}
+.login-panel {
+  width: 350px;
+}
+.action-panel {
+  margin-bottom: 0;
+}
+.loginerr {
+  padding-left: 15px;
+  padding-top: 15px;
+}
+.loginbtn {
+  padding-left: 15px;
+}
+.lost {
+  padding-top: 20px;
+  padding-left: 15px;
+  font-size: 0.8em;
+}
+.error-chip {
+  margin-bottom: 20px;
+}

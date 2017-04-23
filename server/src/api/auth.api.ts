@@ -5,6 +5,7 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import { AUTH_EXPIRY, AUTH_SECRET } from '../config';
 import { UserModel, UserDocument } from '../models/user.model';
+import { EmployerModel, EmployerDocument } from '../models/employer.model';
 import { User } from 'supplyworks';
 import * as jwt from 'jsonwebtoken';
 import * as bpasr from 'body-parser';
@@ -17,17 +18,30 @@ export class AuthAPI {
   buildRouter(): void {
     this.router.post('/', bpasr.json(), (req, res) => {
       var body = <User>req.body;
-      UserModel.findOne({'email': body.email, 'password': body.password }, (err, user: UserDocument) => {
+      UserModel.findOne({'email': body.email}, (err, user: UserDocument) => {
         if( err ) this.errorHandler(err);
         if( !user ) {
-          res.status( 200 ).json( {success: 'false', message: 'Incorrect username or password.' } );
+          this.incorrectUserPassword(res);
         } else {
-          var token = jwt.sign({ username: user.email, isAdmin: user.isAdmin, schoolId: user.schoolId }
-            , AUTH_SECRET, { expiresIn: AUTH_EXPIRY });
-          res.status( 200 ).json( {success: 'true', data: token} );
+          EmployerModel.findOne({'employeeId': user._id}, (empErr, emp) => {
+            if(empErr) this.errorHandler(empErr);
+            if(emp) user.employerId = emp._id;
+            user.comparePassword(body.password, (isMatch) => {
+              if(!isMatch) this.incorrectUserPassword(res);
+              else {
+                var token = jwt.sign( {'email': user.email, 'isAdmin': user.isAdmin, 'id': user._id}, 
+                  AUTH_SECRET, { expiresIn: AUTH_EXPIRY} );
+                res.status(200).json( {'success': true, 'data': {'token': token, 'user': <User>user}} );
+              }
+            });
+          });
         }
       });
     });
+  }
+
+  private incorrectUserPassword(res: Response){
+    res.status(200).json({'success': false, 'data': 'Incorrect username or password.'});
   }
 
   private errorHandler(error: any, response?: Response){ 
