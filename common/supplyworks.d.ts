@@ -11,6 +11,7 @@ declare module 'supplyworks' {
 
   export interface User extends UserBase {
     _id?: string;
+    token?: string;
   }
 
   export interface Address {

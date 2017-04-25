@@ -38,7 +38,10 @@ export class EmployerAPI {
           userDoc.isAdmin = true;
 
           userDoc.save((err, savedUser) => {
-            if(err) this.errorHandler(err, res);
+            if(err) {
+              console.error('an error occurred saving the user');
+              this.errorHandler(err, res);
+            }
             else {
               if( empNew ) {
                 if(empNew.name && empNew.address) {
@@ -47,9 +50,10 @@ export class EmployerAPI {
                   empDoc.employeeId = savedUser._id;
                   empDoc.contactId = savedUser._id;
             
-                  empDoc.save((err, result) => {
-                    if( err ) {
-                      this.errorHandler(err, res);
+                  empDoc.save((empErr, result) => {
+                    if( empErr ) {
+                      console.error('an error occurred saving the employer');
+                      this.errorHandler(empErr, res);
                     } else {
                       if( result ) { 
                         res.status(200).json({'success': true, 'data': result});
@@ -98,7 +102,7 @@ export class EmployerAPI {
         if(err) this.errorHandler(err, res);
         else {
           if(emp) {
-            if(emp._id === req.token.schoolId){
+            if(emp._id == req.token.employerId){
               res.status(200).json({'success': true, 'data': emp});
             } else {
               res.status(401).send('401 - not authorised');

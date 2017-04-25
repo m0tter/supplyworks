@@ -4,6 +4,6 @@ export interface Token {
   isSuper: boolean;
   isAdmin: boolean;
   email: string;
-  schoolId: string;
+  employerId: string;
 }
 export interface AuthRequest extends Request { token: Token; }

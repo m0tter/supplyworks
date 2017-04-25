@@ -10,7 +10,7 @@ export class EmployerComponent implements OnInit {
 
   constructor(private authService: AuthenticationService) { }
 
-  isLoggedIn(): boolean { return this.authService.token && true }
+  isLoggedIn(): boolean { if(this.authService.token) return this.authService.token && true; }
 
   logout(): void {
     this.authService.logout();

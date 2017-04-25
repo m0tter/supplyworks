@@ -28,11 +28,14 @@ export function TokenCheck(req: Request, res: Response, next: NextFunction){
   if( req && req.headers['x-access-token'] ) {
     var authReq = <AuthRequest>req;
     var token = req.headers['x-access-token'];
+    console.log('token: ' + token);
     if( token ) {
       jwt.verify( token, AUTH_SECRET, (err: any, decoded: any) => {
         if( err ) {
+          console.log('tokencheck error: ' + err);
           res.status( 401 ).send('401 - NOT AUTHORISED');
         } else {
+          console.log('it worked');
           authReq.token = decoded;
           next();
         }

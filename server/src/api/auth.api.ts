@@ -29,8 +29,9 @@ export class AuthAPI {
             user.comparePassword(body.password, (isMatch) => {
               if(!isMatch) this.incorrectUserPassword(res);
               else {
-                var token = jwt.sign( {'email': user.email, 'isAdmin': user.isAdmin, 'id': user._id}, 
+                var token = jwt.sign( {'email': user.email, 'isAdmin': user.isAdmin, 'id': user._id, 'employerId': user.employerId}, 
                   AUTH_SECRET, { expiresIn: AUTH_EXPIRY} );
+                user.password = '';
                 res.status(200).json( {'success': true, 'data': {'token': token, 'user': <User>user}} );
               }
             });
