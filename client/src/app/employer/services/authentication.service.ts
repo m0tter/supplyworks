@@ -21,7 +21,10 @@ export class AuthenticationService {
 
   constructor(private http: Http, private employerService: EmployerService) {
     let local = localStorage.getItem('currentUser');
-    this._user = local && JSON.parse(local);
+    if(local) {
+      this._user = JSON.parse(local);
+      this.employerService.employerId = this._user.employerId;
+    }
   }
 
   login(email: string, password: string): Promise<LoginResult> {

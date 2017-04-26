@@ -16,10 +16,14 @@ export class EmployerService {
     this.getEmployer(id);
   }
 
+  get employer(): Employer {
+    if(this._employer) return this._employer; else return null;
+  }
+
   constructor( private http: Http){ }
 
   public getEmployer(employerId?: string): Promise<Employer> {
-    let empId = employerId || this._employerId
+    let empId = employerId || this._employerId;
     if(!empId) Promise.reject('no employer Id');
     return this.http.get(API_EMPLOYER.employer + '/' + empId, this.authHeader())
       .toPromise()
@@ -32,6 +36,22 @@ export class EmployerService {
         console.log('darn it, EmployerService broke: ' + err);
         return Promise.reject(err);
       });
+  }
+
+  public save(employer?: Employer): Promise<Employer> {
+    let emp = employer || this._employer;
+    if(!emp) Promise.reject('no employer');
+    return this.http.put(API_EMPLOYER.employer + '/' + emp._id, JSON.stringify(emp), this.authHeader())
+      .toPromise()
+      .then(res => {
+        let json = res.json();
+        this._employer = json.success && json.data;
+        return Promise.resolve(this._employer);
+      })
+      .catch(err => {
+        console.log('oh gosh, EmployerService broken on save: ' + err);
+        return Promise.reject(err);
+      })
   }
 
   private authHeader(): ResponseOptions {

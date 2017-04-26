@@ -8,7 +8,8 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
-      "supplyworks": ["../common/supplyworks"]
+      "supplyworks": ["../common/supplyworks"],
+      "types": ["./src/types"]
     },
     "removeComments": false,
     "suppressImplicitAnyIndexErrors": true

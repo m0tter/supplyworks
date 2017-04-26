@@ -8,6 +8,7 @@ import { Employer, User }         from 'supplyworks';
 import { TokenCheck }       from '../utils';
 import { AuthRequest }      from '../types';
 import { UserModel }        from '../models/user.model';
+import { MongoError }       from 'types';
 
 import { 
   EmployerModel, 
@@ -36,11 +37,12 @@ export class EmployerAPI {
           userDoc.password = userNew.password;
           userDoc.mobilePhone = userNew.mobilePhone;
           userDoc.isAdmin = true;
-
-          userDoc.save((err, savedUser) => {
+          userDoc.save((err:MongoError, savedUser) => {
             if(err) {
-              console.error('an error occurred saving the user');
-              this.errorHandler(err, res);
+              console.error('an error occurred saving the user: ' + err.code);
+              if(err.code === 11000) res.status(200).json({'success': false, 'data': 'A user with this email address already exists'});
+              else
+                this.errorHandler(err, res);
             }
             else {
               if( empNew ) {
@@ -121,8 +123,9 @@ export class EmployerAPI {
             this.errorHandler(err, res);
           } else {
             if(doc) {
-              if(req.token.isSuper || (req.token.isAdmin && req.token.schoolId === doc._id)) { 
+              if(req.token.isAdmin && req.token.employerId == doc._id) { 
                 let data = req.body as Employer;
+                console.log('data:' + JSON.stringify(data));
                 if(data.name) doc.name = data.name;
                 if(data.address) doc.address = data.address;
                 // if(data.contact) doc.contact = data.contact;

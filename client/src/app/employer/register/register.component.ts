@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
 
       this.registerService.Register(this.employer, this.adminUser)
         .then(res => { this.result = JSON.stringify(res); this.registering = false; })
-        .catch( err => { this.result = 'Error: ' + err });
+        .catch( err => { this.result = err; this.registering = false; });
         
     }
   }

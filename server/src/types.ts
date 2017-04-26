@@ -1,4 +1,7 @@
 import { Request } from 'express';
+import { Error } from 'mongoose';
+
+export interface MongoError extends Error { code: number; }
 
 export interface Token { 
   isSuper: boolean;
