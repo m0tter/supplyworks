@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, ResponseOptions } from '@angular/http';
 import { User, Employer } from 'supplyworks';
 import { API_EMPLOYER } from 'api-paths';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -16,8 +17,8 @@ export class EmployerService {
     this.getEmployer(id);
   }
 
-  get employer(): Employer {
-    if(this._employer) return this._employer; else return null;
+  get employer(): Observable<Employer> {
+    if(this._employer) return new Observable(observer => { observer.next(this._employer); }); else return null;
   }
 
   constructor( private http: Http){ }

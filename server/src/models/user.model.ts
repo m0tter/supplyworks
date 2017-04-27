@@ -2,7 +2,6 @@ import { Model, Schema, Document, model, Error } from 'mongoose';
 import { UserBase } from 'supplyworks';
 import * as bcrypt from 'bcrypt';
 import { SALT_WORK_FACTOR } from '../config/auth.config';
-import { MongoError } from 'types';
 
 var UserSchema = new Schema({
   firstName: String,

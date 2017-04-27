@@ -37,10 +37,16 @@ export class EditComponent implements OnInit {
   doEdit(): void { 
     this._saving = true;
     if(this.editForm.dirty && this.editForm.valid) {
+      let id = this._employer._id;
       this._employer = this.editForm.value;
-      this.empService.save()
-        .then(res => this.router.navigate(['employer']))
-        .catch(err => this._error = err)
+      this._employer._id = id;
+      if(this._employer._id) {
+        this.empService.save(this._employer)
+          .then(res => this.router.navigate(['employer']))
+          .catch(err => this._error = err);
+      } else {
+        this._error = 'Save error - employer ID is required to save';
+      }
     }
   }
 
@@ -54,18 +60,3 @@ export class EditComponent implements OnInit {
   }
 
 }
-
-/*
-this.registering = true;
-    if(this.registerForm.dirty && this.registerForm.valid) {
-      const formModel = this.registerForm.value;
-      this.employer.name = formModel.name;
-      this.adminUser = formModel.user;
-      this.employer.address.push(formModel.address);
-
-      this.registerService.Register(this.employer, this.adminUser)
-        .then(res => { this.result = JSON.stringify(res); this.registering = false; })
-        .catch( err => { this.result = err; this.registering = false; });
-        
-*/
-

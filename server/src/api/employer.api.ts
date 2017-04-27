@@ -117,15 +117,17 @@ export class EmployerAPI {
     });
 
     this.router.put('/:id', bpsr.json(), (req: AuthRequest, res) => {
+       console.log('id:' + JSON.stringify(req.params.id));
       if( req.params.id ){
         EmployerModel.findById(req.params.id, (err, doc) => {
+                         
+
           if(err) {
             this.errorHandler(err, res);
           } else {
             if(doc) {
               if(req.token.isAdmin && req.token.employerId == doc._id) { 
                 let data = req.body as Employer;
-                console.log('data:' + JSON.stringify(data));
                 if(data.name) doc.name = data.name;
                 if(data.address) doc.address = data.address;
                 // if(data.contact) doc.contact = data.contact;

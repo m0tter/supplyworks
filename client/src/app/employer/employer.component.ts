@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from './services';
+import { EmployerService } from './services';
 
 @Component({
   selector: 'app-employer',
@@ -8,15 +9,21 @@ import { AuthenticationService } from './services';
 })
 export class EmployerComponent implements OnInit {
 
-  constructor(private authService: AuthenticationService) { }
+  private _employerName: string;
 
-  isLoggedIn(): boolean { if(this.authService.token) return this.authService.token && true; }
+  constructor(
+    private authService: AuthenticationService,
+    private empService: EmployerService
+  ) { }
+
+  isLoggedIn(): boolean { return this.authService.token && true; }
 
   logout(): void {
     this.authService.logout();
   }
   
   ngOnInit() {
+    if(this.empService.employer) this._employerName = this.empService.employer.name;
   }
 
 }
