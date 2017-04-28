@@ -55,7 +55,8 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._employer = this.empService.employer;
+    this.empService.employer.subscribe(data => this._employer = data, err => this._error = <any>err);
+    // this._employer = this.empService.employer.subscribe();
     this.buildForm();
   }
 

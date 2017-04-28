@@ -57,5 +57,6 @@ export class AuthenticationService {
   logout(): void {
     this._user = null;
     localStorage.removeItem('currentUser');
+    this.employerService.logout();
   }
 }

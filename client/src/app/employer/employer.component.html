@@ -1,4 +1,4 @@
-{{_employerName}}
+<p *ngIf="_employer">{{_employer.name}}</p>
 <a *ngIf="!isLoggedIn()" routerLink="register">Register</a>
 <a *ngIf="!isLoggedIn()" routerLink="login">Login</a>
 <a *ngIf="isLoggedIn()" routerLink="." (click)="logout()">Logout</a>
