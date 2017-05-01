@@ -3,6 +3,7 @@ import { Http, Headers, ResponseOptions } from '@angular/http';
 import { User, Employer } from 'supplyworks';
 import { API_EMPLOYER } from 'api-paths';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -12,7 +13,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class EmployerService {
   private _employerId: string;
-  public _employer: Observable<Employer>;
+  private _employer = new Subject<Employer>();
   public user: User;
 
   set employerId(id: string) {
@@ -21,48 +22,22 @@ export class EmployerService {
   }
 
   get employer(): Observable<Employer> {
-    if(!this._employer) {
-      this._employer = this.getEmployer();
-    }
-    return this._employer;
+    return this._employer.asObservable();
   }
 
-  constructor( private http: Http){ 
-    //let blank = {name:'', address:[], contactId: '', casualId: [], employeeId: []};
-    //this._employer = this.getEmployer(); 
-  }
+  constructor( private http: Http) { }
 
-  // public getEmployerPromise(employerId?: string): Promise<Employer> {
-  //   let empId = employerId || this._employerId;
-  //   if(!empId) Promise.reject('no employer Id');
-  //   return this.http.get(API_EMPLOYER.employer + '/' + empId, this.authHeader())
-  //     .toPromise()
-  //     .then(res => {
-  //       let json = res.json();
-  //       this._employer = json.success && json.data
-  //       return Promise.resolve(this._employer);
-  //     })
-  //     .catch(err => {
-  //       console.log('darn it, EmployerService broke: ' + err);
-  //       return Promise.reject(err);
-  //     });
-  // }
-
-  public getEmployer(employerId?: string): Observable<Employer> {
+  public getEmployer(employerId?: string):void {
     let empId = employerId || this._employerId;
-    console.log('got here');
-    if(!empId) {
-      console.log('had no id');
-      let blank:Employer = {name:'', address:[], contactId: '', casualId: [], employeeId: []}
-      return Observable.of(blank);
-    }
 
-    console.log('got id: ', empId);
-    return this.http.get(API_EMPLOYER.employer + '/' + empId, this.authHeader())
-      .do(() => console.log('you whooo'))
-      .map(res => { let data = res.json().data; this._employer.name = data.name; })
-      .do(data => console.log('employer.service: ', data.name))
-      .catch(err => this.errorHandler(err));
+    if(!empId) {
+      this._employer.next();
+    } else {
+      this.http.get(API_EMPLOYER.employer + '/' + empId, this.authHeader())
+        .toPromise()
+        .then(res => this._employer.next(res.json().data))
+        .catch(err => this.errorHandler(err));
+    }
   }
 
   public save(employer?: Employer): Promise<Employer> {
@@ -83,8 +58,7 @@ export class EmployerService {
   }
 
   public logout(): void {
-    let blank: Employer = {name:'', address:[], contactId: '', casualId: [], employeeId: []}
-    this._employer = Observable.of(blank);
+    this._employer.next();    
   }
 
   private errorHandler(error: any): Observable<any> {
@@ -93,16 +67,13 @@ export class EmployerService {
   }
 
   private authHeader(): ResponseOptions {
-    console.log('now Im here');
     let user:User = JSON.parse(localStorage.getItem('currentUser'));
     if(user.token) {
       let headers = new Headers();
       headers.append('Content-Type', 'application/json');
       headers.append('x-access-token', user.token);
-      console.log('returning da token');
       return new ResponseOptions({'headers': headers});
     } else {
-      console.log('oh no');
       throw new Error('auth token missing');
     }
   } 
