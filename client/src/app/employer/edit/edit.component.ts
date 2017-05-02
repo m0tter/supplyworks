@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Employer } from 'supplyworks';
+import { Observable } from 'rxjs/Observable';
 
 import { EmployerService } from '../services';
 import { EditService } from '../services';
@@ -55,9 +56,16 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.empService.employer.subscribe(data => this._employer = data, err => this._error = <any>err);
-    // this._employer = this.empService.employer.subscribe();
+    this.empService.employer
+      .map(res => this._employer = res)
+      .catch(err => this.errorHandler(err));
+    console.log('employer: ' + JSON.stringify(this._employer));
     this.buildForm();
+  }
+
+  private errorHandler(error: any): Observable<any> {
+    console.error('edit component is broken: ', error);
+    return Observable.throw(error);
   }
 
 }
