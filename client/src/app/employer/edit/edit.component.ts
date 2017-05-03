@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Employer } from 'supplyworks';
@@ -12,16 +12,17 @@ import { EditService } from '../services';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
   public editForm: FormGroup;
-  private _employer: Employer
+  private _employer: Employer;
   private _saving = false;
   private _error: string;
 
   constructor(
     private formBuilder: FormBuilder, 
     private empService: EmployerService,
-    private router: Router) { 
+    private router: Router) {
+      this._employer = {address: [{line1:'', line2:'', suburb:'', state:'', country:''}], casualId: [], contactId: '', employeeId: [], name: ''};
   }
 
   buildForm(): void {
@@ -56,15 +57,31 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.empService.employer
+    this.empService.getEmployerNew()
       .map(res => this._employer = res)
-      .catch(err => this.errorHandler(err));
-    console.log('employer: ' + JSON.stringify(this._employer));
+      .catch(err => this.errorHandler(err))
+      .do(() => { 
+        this.editForm.setValue({
+          name: this._employer.name,
+          address: {
+            line1: this._employer.address[0].line1,
+            line2: this._employer.address[0].line2,
+            suburb: this._employer.address[0].suburb
+          }
+        })
+      })
+      .subscribe()
+      
     this.buildForm();
+  }
+
+  ngOnDestroy() {
+
   }
 
   private errorHandler(error: any): Observable<any> {
     console.error('edit component is broken: ', error);
+    this._error = error.message || error;
     return Observable.throw(error);
   }
 

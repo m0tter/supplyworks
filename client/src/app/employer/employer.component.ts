@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from './services';
 import { EmployerService } from './services';
 import { Employer } from 'supplyworks';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-employer',
@@ -12,14 +12,12 @@ import { Subscription } from 'rxjs/Subscription';
 export class EmployerComponent implements OnInit, OnDestroy {
 
   private _employerName: string;
-  private _subscription: Subscription;
   private _employer: Employer;
 
   constructor(
     private authService: AuthenticationService,
     private empService: EmployerService
   ) { 
-    this._subscription = this.empService.employer.subscribe(emp => { this._employer = emp; });
   }
 
   isLoggedIn(): boolean { 
@@ -31,9 +29,16 @@ export class EmployerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._subscription.unsubscribe();
+    
   }
   
-  ngOnInit() { }
+  ngOnInit() {
+    //if(this.empService.employerId) {
+    this.empService.getEmployerNew()
+      .map(res => this._employer = res)
+      .catch(err => Observable.throw(err))
+      .subscribe();
+   // }
+  }
 
 }
