@@ -43,9 +43,9 @@ export class EditComponent implements OnInit, OnDestroy {
       this._employer = this.editForm.value;
       this._employer._id = id;
       if(this._employer._id) {
-        this.empService.save(this._employer)
-          .then(res => this.router.navigate(['employer']))
-          .catch(err => this._error = err);
+        // this.empService.save(this._employer)
+        //   .then(res => this.router.navigate(['employer']))
+        //   .catch(err => this._error = err);
       } else {
         this._error = 'Save error - employer ID is required to save';
       }
@@ -57,20 +57,20 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.empService.getEmployerNew()
-      .map(res => this._employer = res)
-      .catch(err => this.errorHandler(err))
-      .do(() => { 
-        this.editForm.setValue({
-          name: this._employer.name,
-          address: {
-            line1: this._employer.address[0].line1,
-            line2: this._employer.address[0].line2,
-            suburb: this._employer.address[0].suburb
-          }
-        })
-      })
-      .subscribe()
+    // this.empService.getEmployerNew()
+    //   .map(res => this._employer = res)
+    //   .catch(err => this.errorHandler(err))
+    //   .do(() => { 
+    //     this.editForm.setValue({
+    //       name: this._employer.name,
+    //       address: {
+    //         line1: this._employer.address[0].line1,
+    //         line2: this._employer.address[0].line2,
+    //         suburb: this._employer.address[0].suburb
+    //       }
+    //     })
+    //   })
+    //   .subscribe()
       
     this.buildForm();
   }

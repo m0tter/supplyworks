@@ -3,3 +3,5 @@
 <a *ngIf="!isLoggedIn()" routerLink="login">Login</a>
 <a *ngIf="isLoggedIn()" routerLink="." (click)="logout()">Logout</a>
 <a *ngIf="isLoggedIn()" routerLink="edit">Edit</a>
+
+<button type="button" md-button (click)="update()">Update</button>

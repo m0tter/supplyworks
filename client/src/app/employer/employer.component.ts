@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from './services';
 import { EmployerService } from './services';
 import { Employer } from 'supplyworks';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-employer',
@@ -13,6 +13,7 @@ export class EmployerComponent implements OnInit, OnDestroy {
 
   private _employerName: string;
   private _employer: Employer;
+  private _subs: Subscription = new Subscription();
 
   constructor(
     private authService: AuthenticationService,
@@ -24,21 +25,24 @@ export class EmployerComponent implements OnInit, OnDestroy {
     return this.authService.token && true;
   }
 
+  update() {
+    this.empService.getEmployer();
+  }
+
   logout(): void {
     this.authService.logout();
   }
 
   ngOnDestroy() {
-    
+    this._subs.unsubscribe();
   }
   
   ngOnInit() {
-    //if(this.empService.employerId) {
-    this.empService.getEmployerNew()
-      .map(res => this._employer = res)
-      .catch(err => Observable.throw(err))
-      .subscribe();
-   // }
+    this._subs.add(this.empService.employer.subscribe(res => this._employer = res, err => this.errorHandler(err)));
+  }
+
+  errorHandler(error: any) {
+    console.error('error in employer.component: ', error.message || error);
   }
 
 }

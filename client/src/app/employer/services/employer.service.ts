@@ -2,87 +2,57 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, ResponseOptions } from '@angular/http';
 import { User, Employer } from 'supplyworks';
 import { API_EMPLOYER } from 'api-paths';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { BehaviorSubject, Observable } from 'rxjs';
 import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/observable/throw';
+
+// export class Employer {
+//   name: string;
+//   address: string;
+//   contactId: string;
+//   casualId: string;
+//   employeeId: string;
+//   _id?: string;
+// }
 
 @Injectable()
 export class EmployerService {
-  private _empl: Employer;
-  private _emplSubject = new BehaviorSubject<
+  private _initialEmployer: Employer = {address: [], casualId: [], contactId: '', employeeId: [], name: ''};
+  private _employer: BehaviorSubject<Employer> = new BehaviorSubject<Employer>(this._initialEmployer);
   private _employerId: string;
-  private _employer = new Subject<Employer>();
-  public user: User;
 
   set employerId(id: string) {
     this._employerId = id;
-    this.getEmployer(id);
+    this.getEmployer();
   }
 
-  get employer(): Observable<Employer> {
-    return this._employer.asObservable();
-  }
+  public readonly employer: Observable<Employer> = this._employer.asObservable();
 
-  constructor( private http: Http) { }
+  constructor(private http: Http) { }
 
-  public getEmployer(employerId?: string):void {
-    let empId = employerId || this._employerId;
-
-    if(!empId) {
-      this._employer.next();
-    } else {
-      this.http.get(API_EMPLOYER.employer + '/' + empId, this.authHeader())
+  public getEmployer(empId?: string) {
+    let id = empId || this._employerId;
+    if(id) {
+      this.http.get(API_EMPLOYER.employer + '/' + id, this.authHeader())
         .toPromise()
-        .then(res => this._employer.next(res.json().data))
-        .catch(err => this.errorHandler(err));
-    }
+        .then(res => {
+          let json = res.json();
+          if(json.success) this._employer.next(json.data);
+          else {
+            this.errorHandler(json.data);
+            return Promise.reject('error loading employer, please check server logs');
+          }
+        })
+        .catch(err => this.errorHandler(err))
+    } else console.log('no ID');
   }
 
-  public getEmployerNew(employerId?: string): Observable<Employer> {
-
-    let empId = employerId || this._employerId;
-    if(!empId || empId === '0') {
-      // return Observable.throw('Could not get employer, no employer ID');
-      return Observable.of(null);
-    }
-    return this.http.get(API_EMPLOYER.employer + '/' + empId, this.authHeader())
-      .map(res => {
-        let json = res.json();
-        if(json.success) return json.data; 
-        else return this.errorHandler('error getting employer, please check server logs');
-      })
-      .catch(err => this.errorHandler(err));
+  public logout() {
+    this._employer.next(this._initialEmployer);
   }
 
-  public save(employer?: Employer): Promise<Employer> {
-    let emp = employer || this._employer;
-    if(!emp) Promise.reject('no employer');
-    return Promise.reject('not implemented');
-    // return this.http.put(API_EMPLOYER.employer + '/' + emp._id, JSON.stringify(emp), this.authHeader())
-    //   .toPromise()
-    //   .then(res => {
-    //     let json = res.json();
-    //     this._employer = json.success && json.data;
-    //     return Promise.resolve(this._employer);
-    //   })
-    //   .catch(err => {
-    //     console.log('oh gosh, EmployerService broken on save: ' + err);
-    //     return Promise.reject(err);
-    //   })
-  }
-
-  public logout(): void {
-    this.getEmployerNew('0');
-  }
-
-  private errorHandler(error: any): Observable<any> {
+  private errorHandler(error: any): Promise<any> {
     console.error('error in employer.service: ', error.message || error);
-    return Observable.throw(error || 'darn it, EmployerService broke');
+    return Promise.reject(error || 'darn it, EmployerService broke');
   }
 
   private authHeader(): ResponseOptions {
