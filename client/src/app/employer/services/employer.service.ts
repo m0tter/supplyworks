@@ -1,24 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Http, Headers, ResponseOptions } from '@angular/http';
 import { User, Employer } from 'supplyworks';
 import { API_EMPLOYER } from 'api-paths';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { AuthenticationService } from './';
 import 'rxjs/add/operator/toPromise';
 
-// export class Employer {
-//   name: string;
-//   address: string;
-//   contactId: string;
-//   casualId: string;
-//   employeeId: string;
-//   _id?: string;
-// }
-
 @Injectable()
-export class EmployerService {
+export class EmployerService implements OnDestroy{
   private _initialEmployer: Employer = {address: [], casualId: [], contactId: '', employeeId: [], name: ''};
   private _employer: BehaviorSubject<Employer> = new BehaviorSubject<Employer>(this._initialEmployer);
   private _employerId: string;
+  private _sub = new Subscription();
 
   set employerId(id: string) {
     this._employerId = id;
@@ -27,12 +20,17 @@ export class EmployerService {
 
   public readonly employer: Observable<Employer> = this._employer.asObservable();
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private authService: AuthenticationService) {
+    this._sub.add(this.authService.user.subscribe(
+      res => this.employerId = res.employerId,
+      err => this.errorHandler(err)
+    ));
+   }
 
   public getEmployer(empId?: string) {
     let id = empId || this._employerId;
     if(id) {
-      this.http.get(API_EMPLOYER.employer + '/' + id, this.authHeader())
+      this.http.get(API_EMPLOYER.employer + '/' + id, this.authService.authHeader())
         .toPromise()
         .then(res => {
           let json = res.json();
@@ -43,7 +41,7 @@ export class EmployerService {
           }
         })
         .catch(err => this.errorHandler(err))
-    } else console.log('no ID');
+    } else this._employer.next(this._initialEmployer);
   }
 
   public logout() {
@@ -55,15 +53,7 @@ export class EmployerService {
     return Promise.reject(error || 'darn it, EmployerService broke');
   }
 
-  private authHeader(): ResponseOptions {
-    let user:User = JSON.parse(localStorage.getItem('currentUser'));
-    if(user.token) {
-      let headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      headers.append('x-access-token', user.token);
-      return new ResponseOptions({'headers': headers});
-    } else {
-      throw new Error('auth token missing');
-    }
-  } 
+  public ngOnDestroy() {
+    this._sub.unsubscribe();
+  }
 }

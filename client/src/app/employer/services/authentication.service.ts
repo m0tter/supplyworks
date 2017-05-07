@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { API_EMPLOYER } from 'api-paths';
 import { User } from 'supplyworks';
-import { EmployerService } from './employer.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -15,15 +15,19 @@ export enum LoginResult {
 
 @Injectable()
 export class AuthenticationService {
-  private _user: User;
+  private _initialUser: User = {email: '', employerId: '', firstName : '', isAdmin: false, lastName: '', mobilePhone: '',password: ''};
+  private _user: BehaviorSubject<User> = new BehaviorSubject<User>(this._initialUser);
+  private _isLoggedIn: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
+  public readonly user: Observable<User> = this._user.asObservable();
+  public readonly isLoggedIn: Observable<Boolean> = this._isLoggedIn.asObservable();
 
-  get token(): string { if(this._user && this._user.token) return this._user.token; else return null;}
+  // get token(): string { if(this._user && this._user.token) return this._user.token; else return null;}
 
-  constructor(private http: Http, private employerService: EmployerService) {
+  constructor(private http: Http) {
     let local = localStorage.getItem('currentUser');
     if(local) {
-      this._user = JSON.parse(local);
-      this.employerService.employerId = this._user.employerId;
+      localStorage.removeItem('currentUser');
+      // this._user.next(JSON.parse(local));
     }
   }
 
@@ -37,12 +41,14 @@ export class AuthenticationService {
       .then((response) => {
         let json = response.json();
         if(json.success){
-          this._user = json.data.user as User;
+          let u:User;
+          u = json.data.user;
           if(json.data.token){
-            this._user.token = json.data.token;
-            if(this._user.employerId && this._user.isAdmin) {
-              localStorage.setItem('currentUser', JSON.stringify(this._user));
-              this.employerService.employerId = this._user.employerId;
+            u.token = json.data.token;
+            if(u.employerId && u.isAdmin) {
+              localStorage.setItem('currentUser', JSON.stringify(u));
+              this._user.next(u);
+              this._isLoggedIn.next(true);
               return Promise.resolve(LoginResult.success);
             } else { return Promise.resolve(LoginResult.notAuthorised); }
           } else { return Promise.resolve(LoginResult.error); }
@@ -55,8 +61,20 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    this._user = null;
+    this._user.next(this._initialUser);
+    this._isLoggedIn.next(false);
     localStorage.removeItem('currentUser');
-    this.employerService.logout();
   }
+
+  public authHeader(): RequestOptions {
+    let user = this._user.getValue();
+    if(user) {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      headers.append('x-access-token', user.token);
+      return new RequestOptions({'headers': headers});
+    } else {
+      throw new Error('auth token missing');
+    }
+  } 
 }

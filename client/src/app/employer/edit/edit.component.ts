@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Employer } from 'supplyworks';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 
 import { EmployerService } from '../services';
 import { EditService } from '../services';
@@ -17,6 +17,7 @@ export class EditComponent implements OnInit, OnDestroy {
   private _employer: Employer;
   private _saving = false;
   private _error: string;
+  private _sub = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -57,26 +58,28 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.empService.getEmployerNew()
-    //   .map(res => this._employer = res)
-    //   .catch(err => this.errorHandler(err))
-    //   .do(() => { 
-    //     this.editForm.setValue({
-    //       name: this._employer.name,
-    //       address: {
-    //         line1: this._employer.address[0].line1,
-    //         line2: this._employer.address[0].line2,
-    //         suburb: this._employer.address[0].suburb
-    //       }
-    //     })
-    //   })
-    //   .subscribe()
-      
     this.buildForm();
+
+    this._sub.add(
+      this.empService.employer
+        .map(res => this._employer = res)
+        .catch(err => this.errorHandler(err))
+        .do(() => { 
+          this.editForm.setValue({
+            name: this._employer.name,
+            address: {
+              line1: this._employer.address[0].line1,
+              line2: this._employer.address[0].line2,
+              suburb: this._employer.address[0].suburb
+            }
+          })
+        })
+        .subscribe()
+    );
   }
 
   ngOnDestroy() {
-
+    this._sub.unsubscribe();
   }
 
   private errorHandler(error: any): Observable<any> {

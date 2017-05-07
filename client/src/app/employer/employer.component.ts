@@ -14,20 +14,13 @@ export class EmployerComponent implements OnInit, OnDestroy {
   private _employerName: string;
   private _employer: Employer;
   private _subs: Subscription = new Subscription();
+  private _isLoggedIn: Boolean;
 
   constructor(
     private authService: AuthenticationService,
     private empService: EmployerService
-  ) { 
-  }
+  ) { }
 
-  isLoggedIn(): boolean { 
-    return this.authService.token && true;
-  }
-
-  update() {
-    this.empService.getEmployer();
-  }
 
   logout(): void {
     this.authService.logout();
@@ -39,6 +32,7 @@ export class EmployerComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
     this._subs.add(this.empService.employer.subscribe(res => this._employer = res, err => this.errorHandler(err)));
+    this._subs.add(this.authService.isLoggedIn.subscribe(res => this._isLoggedIn = res));
   }
 
   errorHandler(error: any) {
