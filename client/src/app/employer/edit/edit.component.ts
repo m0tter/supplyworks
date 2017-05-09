@@ -5,7 +5,6 @@ import { Employer } from 'supplyworks';
 import { Observable, Subscription } from 'rxjs';
 
 import { EmployerService } from '../services';
-import { EditService } from '../services';
 
 @Component({
   selector: 'app-edit',
@@ -23,7 +22,8 @@ export class EditComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder, 
     private empService: EmployerService,
     private router: Router) {
-      this._employer = {address: [{line1:'', line2:'', suburb:'', state:'', country:''}], casualId: [], contactId: '', employeeId: [], name: ''};
+      //this._employer = new Employer();
+      //this._employer = {address: [{line1:'', line2:'', suburb:'', state:'', country:''}], casualId: [], contactId: '', employeeId: [], name: ''};
   }
 
   buildForm(): void {
@@ -44,9 +44,9 @@ export class EditComponent implements OnInit, OnDestroy {
       this._employer = this.editForm.value;
       this._employer._id = id;
       if(this._employer._id) {
-        // this.empService.save(this._employer)
-        //   .then(res => this.router.navigate(['employer']))
-        //   .catch(err => this._error = err);
+        this.empService.saveEmployer(this._employer)
+          .then(res => this.router.navigate(['employer']))
+          .catch(err => this._error = err);
       } else {
         this._error = 'Save error - employer ID is required to save';
       }

@@ -120,8 +120,6 @@ export class EmployerAPI {
        console.log('id:' + JSON.stringify(req.params.id));
       if( req.params.id ){
         EmployerModel.findById(req.params.id, (err, doc) => {
-                         
-
           if(err) {
             this.errorHandler(err, res);
           } else {

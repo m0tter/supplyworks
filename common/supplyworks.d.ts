@@ -22,15 +22,29 @@ declare module 'supplyworks' {
     country :string;
   }
 
-    export interface EmployerBase {
+    export interface Employer {
     name: string;
     address: Address[];
     contactId: string;
     casualId: string[];
     employeeId: string[];
+    _id: any;
   }
 
-  export interface Employer extends EmployerBase {
-    _id?: string;
-  }
+  // export class Address {
+  //   line1: string;
+  //   line2: string;
+  //   suburb: string;
+  //   state: string;
+  //   country: string;
+  // }
+
+  // export class Employer {
+  //   name: string;
+  //   address: Address[];
+  //   contactId: string;
+  //   casualId: string;
+  //   employeeId: string[];
+  //   _id: any;
+  // }
 }

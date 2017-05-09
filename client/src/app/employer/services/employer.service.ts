@@ -44,6 +44,24 @@ export class EmployerService implements OnDestroy{
     } else this._employer.next(this._initialEmployer);
   }
 
+  public saveEmployer(employer: Employer): Promise<Employer> {
+    if(employer) {
+      return this.http.put(API_EMPLOYER.employer + '/' + employer._id, employer, this.authService.authHeader())
+        .toPromise()
+        .then(res => {
+          let json = res.json();
+          if(json.success) {
+            this._employer.next(json.data);
+            return <Employer>json.data;
+          } else {
+            this.errorHandler(json.data);
+            return Promise.reject<Employer>('error saving employer, please check server logs');
+          }
+        })
+        .catch(err => this.errorHandler(err))
+    }
+  }
+
   public logout() {
     this._employer.next(this._initialEmployer);
   }

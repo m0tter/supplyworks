@@ -8,7 +8,6 @@ import { MaterialModule } from '@angular/material';
 import { RegisterService } from './services';
 import { EmployerService } from './services';
 import { AuthenticationService } from './services';
-import { EditService } from './services';
 
 import { EmployerComponent } from './employer.component';
 import { RegisterComponent } from './register/register.component';

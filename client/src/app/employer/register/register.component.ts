@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employer, User, Address } from 'supplyworks';
+import { Employr } from '../../_types';
 
 import { RegisterService } from '../services'
 
@@ -16,9 +17,11 @@ export class RegisterComponent implements OnInit {
   public registerForm: FormGroup;
   public registering = false;
   public result = '';
+  public emp = new Employr();
 
   constructor( private fb: FormBuilder, private registerService: RegisterService ) {
-    this.employer = {name: '', address: [], contactId: '', employeeId: [], casualId: []};
+    // this.employer = new Employer();
+    this.employer = {name: '', address: [], contactId: '', employeeId: [], casualId: [], _id: ''};
     this.adminUser = {email: '', firstName: '', employerId: '', isAdmin: true, lastName: '', mobilePhone: '', password: ''};
     this.buildForm();
    }
@@ -52,7 +55,6 @@ export class RegisterComponent implements OnInit {
       this.registerService.Register(this.employer, this.adminUser)
         .then(res => { this.result = JSON.stringify(res); this.registering = false; })
         .catch( err => { this.result = err; this.registering = false; });
-        
     }
   }
 

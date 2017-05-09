@@ -21,8 +21,6 @@ export class AuthenticationService {
   public readonly user: Observable<User> = this._user.asObservable();
   public readonly isLoggedIn: Observable<Boolean> = this._isLoggedIn.asObservable();
 
-  // get token(): string { if(this._user && this._user.token) return this._user.token; else return null;}
-
   constructor(private http: Http) {
     let local = localStorage.getItem('currentUser');
     if(local) {
