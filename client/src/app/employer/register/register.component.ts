@@ -24,7 +24,6 @@ export class RegisterComponent implements OnInit {
     this.employer = {name: '', address: [], contactId: '', employeeId: [], casualId: [], _id: ''};
     this.adminUser = {email: '', firstName: '', employerId: '', isAdmin: true, lastName: '', mobilePhone: '', password: ''};
     this.buildForm();
-    this.emp.
    }
 
   buildForm(): void {
