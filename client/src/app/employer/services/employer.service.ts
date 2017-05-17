@@ -1,14 +1,14 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Http, Headers, ResponseOptions } from '@angular/http';
-import { User, Employer } from 'supplyworks';
 import { API_EMPLOYER } from 'api-paths';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from './';
+import { Employer, User } from '../../_types';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class EmployerService implements OnDestroy{
-  private _initialEmployer: Employer = {address: [], casualId: [], contactId: '', employeeId: [], name: ''};
+  private _initialEmployer = new Employer();
   private _employer: BehaviorSubject<Employer> = new BehaviorSubject<Employer>(this._initialEmployer);
   private _employerId: string;
   private _sub = new Subscription();

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from './services';
 import { EmployerService } from './services';
-import { Employer } from 'supplyworks';
+import { Employer } from '../_types';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({

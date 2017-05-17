@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User, Employer } from 'supplyworks';
+import { Employer, User } from '../../_types';
 
 import { AuthenticationService, LoginResult } from '../services';
 

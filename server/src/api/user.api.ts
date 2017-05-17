@@ -4,7 +4,7 @@
 
 import { Router, Response } from 'express';
 import * as bpsr from 'body-parser';
-import { User } from 'supplyworks';
+import { IUser } from 'supplyworks';
 import { UserModel, UserDocument} from '../models/user.model';
 
 export class UserAPI {
@@ -12,7 +12,7 @@ export class UserAPI {
 
   constructor() { 
     this.router.post('/', bpsr.json(), (req, res) => {
-      let userNew = req.body as User;
+      let userNew = req.body as IUser;
       let userDoc = new UserModel;
       
       if(userNew && userDoc) {

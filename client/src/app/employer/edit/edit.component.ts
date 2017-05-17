@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Employer } from 'supplyworks';
 import { Observable, Subscription } from 'rxjs';
 
 import { EmployerService } from '../services';
+import { Employer } from '../../_types';
 
 @Component({
   selector: 'app-edit',
@@ -13,7 +13,7 @@ import { EmployerService } from '../services';
 })
 export class EditComponent implements OnInit, OnDestroy {
   public editForm: FormGroup;
-  private _employer: Employer;
+  private _employer = new Employer();
   private _saving = false;
   private _error: string;
   private _sub = new Subscription();
@@ -21,10 +21,7 @@ export class EditComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder, 
     private empService: EmployerService,
-    private router: Router) {
-      //this._employer = new Employer();
-      //this._employer = {address: [{line1:'', line2:'', suburb:'', state:'', country:''}], casualId: [], contactId: '', employeeId: [], name: ''};
-  }
+    private router: Router) { }
 
   buildForm(): void {
     this.editForm = this.formBuilder.group({
@@ -44,7 +41,7 @@ export class EditComponent implements OnInit, OnDestroy {
       this._employer = this.editForm.value;
       this._employer._id = id;
       if(this._employer._id) {
-        this.empService.saveEmployer(this._employer)
+        this.empService.saveEmployer(this._employer as Employer)
           .then(res => this.router.navigate(['employer']))
           .catch(err => this._error = err);
       } else {

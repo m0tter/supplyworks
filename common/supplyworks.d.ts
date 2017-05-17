@@ -9,7 +9,7 @@ declare module 'supplyworks' {
     employerId: string;
   }
 
-  export interface User extends UserBase {
+  export interface IUser extends UserBase {
     _id?: string;
     token?: string;
   }
@@ -22,7 +22,7 @@ declare module 'supplyworks' {
     country :string;
   }
 
-    export interface Employer {
+    export interface IEmployer {
     name: string;
     address: Address[];
     contactId: string;

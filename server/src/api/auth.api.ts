@@ -6,7 +6,7 @@ import { Router, Response, Request, NextFunction } from 'express';
 import { AUTH_EXPIRY, AUTH_SECRET } from '../config';
 import { UserModel, UserDocument } from '../models/user.model';
 import { EmployerModel, EmployerDocument } from '../models/employer.model';
-import { User } from 'supplyworks';
+import { IUser } from 'supplyworks';
 import * as jwt from 'jsonwebtoken';
 import * as bpasr from 'body-parser';
 
@@ -17,7 +17,7 @@ export class AuthAPI {
 
   buildRouter(): void {
     this.router.post('/', bpasr.json(), (req, res) => {
-      var body = <User>req.body;
+      var body = <IUser>req.body;
       UserModel.findOne({'email': body.email}, (err, user: UserDocument) => {
         if( err ) this.errorHandler(err);
         if( !user ) {

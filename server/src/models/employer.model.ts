@@ -3,7 +3,7 @@
 // date:    30/3/17
 
 import * as m from 'mongoose';
-import { Address, Employer } from 'supplyworks';
+import { Address, IEmployer } from 'supplyworks';
 
 let AddressSchema = new m.Schema({
   line1: String,
@@ -22,6 +22,6 @@ let EmployerSchema = new m.Schema({
 });
 
 export interface AddressDocument extends Address, m.Document { }
-export interface EmployerDocument extends Employer, m.Document { }
+export interface EmployerDocument extends IEmployer, m.Document { }
 
 export const EmployerModel = m.model<EmployerDocument>('Employers', EmployerSchema);

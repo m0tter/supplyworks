@@ -4,7 +4,7 @@
 
 import { Router, Response } from 'express';
 import * as bpsr            from 'body-parser';
-import { Employer, User }         from 'supplyworks';
+import { IEmployer, User }         from 'supplyworks';
 import { TokenCheck }       from '../utils';
 import { AuthRequest }      from '../types';
 import { UserModel }        from '../models/user.model';
@@ -26,7 +26,7 @@ export class EmployerAPI {
     this.router.post('/register', bpsr.json(), (req, res) => {
       let empDoc = new EmployerModel;
       let userDoc = new UserModel;
-      let empNew = req.body.employer as Employer;
+      let empNew = req.body.employer as IEmployer;
       let userNew = req.body.user as User;
 
       if( userNew ) {
@@ -88,7 +88,7 @@ export class EmployerAPI {
 
     this.router.get('/all', (req: AuthRequest, res) => {
       if(req.token.isSuper) {
-        EmployerModel.find((err, employers: Employer[] ) => {
+        EmployerModel.find((err, employers: IEmployer[] ) => {
           if(err) this.errorHandler(err, res);
           if(employers) {
             res.status(200).json({'success': 'true', 'data': employers});
@@ -125,7 +125,7 @@ export class EmployerAPI {
           } else {
             if(doc) {
               if(req.token.isAdmin && req.token.employerId == doc._id) { 
-                let data = req.body as Employer;
+                let data = req.body as IEmployer;
                 if(data.name) doc.name = data.name;
                 if(data.address) doc.address = data.address;
                 // if(data.contact) doc.contact = data.contact;

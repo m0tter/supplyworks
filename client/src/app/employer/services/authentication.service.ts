@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { API_EMPLOYER } from 'api-paths';
-import { User } from 'supplyworks';
+import { User } from '../../_types';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import 'rxjs/add/operator/toPromise';
@@ -15,7 +15,7 @@ export enum LoginResult {
 
 @Injectable()
 export class AuthenticationService {
-  private _initialUser: User = {email: '', employerId: '', firstName : '', isAdmin: false, lastName: '', mobilePhone: '',password: ''};
+  private _initialUser = new User();
   private _user: BehaviorSubject<User> = new BehaviorSubject<User>(this._initialUser);
   private _isLoggedIn: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
   public readonly user: Observable<User> = this._user.asObservable();

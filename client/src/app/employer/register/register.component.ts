@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Employer, User, Address } from 'supplyworks';
-import { Employr } from '../../_types';
+import { Address } from 'supplyworks';
+import { User, Employer } from '../../_types';
 
 import { RegisterService } from '../services'
 
@@ -12,17 +12,14 @@ import { RegisterService } from '../services'
 })
 export class RegisterComponent implements OnInit {
 
-  public employer:  Employer;
-  public adminUser: User;
+  public employer = new Employer();
+  public adminUser = new User();
   public registerForm: FormGroup;
   public registering = false;
   public result = '';
-  public emp = new Employr();
 
   constructor( private fb: FormBuilder, private registerService: RegisterService ) {
-    // this.employer = new Employer();
-    this.employer = {name: '', address: [], contactId: '', employeeId: [], casualId: [], _id: ''};
-    this.adminUser = {email: '', firstName: '', employerId: '', isAdmin: true, lastName: '', mobilePhone: '', password: ''};
+    this.adminUser.isAdmin = true;
     this.buildForm();
    }
 
