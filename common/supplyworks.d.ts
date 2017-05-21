@@ -22,7 +22,7 @@ declare module 'supplyworks' {
     country :string;
   }
 
-    export interface IEmployer {
+  export interface IEmployer {
     name: string;
     address: Address[];
     contactId: string;

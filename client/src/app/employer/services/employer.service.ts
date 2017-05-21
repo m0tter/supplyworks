@@ -18,6 +18,10 @@ export class EmployerService implements OnDestroy{
     this.getEmployer();
   }
 
+  get employerId() {
+    return this._employerId;
+  }
+
   public readonly employer: Observable<Employer> = this._employer.asObservable();
 
   constructor(private http: Http, private authService: AuthenticationService) {
@@ -34,8 +38,10 @@ export class EmployerService implements OnDestroy{
         .toPromise()
         .then(res => {
           let json = res.json();
-          if(json.success) this._employer.next(json.data);
-          else {
+          if(json.success) {
+            this._employer.next(json.data);
+            this.employerId = id;
+          } else {
             this.errorHandler(json.data);
             return Promise.reject('error loading employer, please check server logs');
           }

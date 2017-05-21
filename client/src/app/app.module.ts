@@ -13,7 +13,7 @@ import { AppRoutingModule } from './app.routes';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

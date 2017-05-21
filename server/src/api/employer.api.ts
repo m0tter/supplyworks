@@ -4,7 +4,7 @@
 
 import { Router, Response } from 'express';
 import * as bpsr            from 'body-parser';
-import { IEmployer, User }         from 'supplyworks';
+import { IEmployer, IUser } from 'supplyworks';
 import { TokenCheck }       from '../utils';
 import { AuthRequest }      from '../types';
 import { UserModel }        from '../models/user.model';
@@ -27,7 +27,7 @@ export class EmployerAPI {
       let empDoc = new EmployerModel;
       let userDoc = new UserModel;
       let empNew = req.body.employer as IEmployer;
-      let userNew = req.body.user as User;
+      let userNew = req.body.user as IUser;
 
       if( userNew ) {
         if(userNew.lastName && userNew.firstName && userNew.email && userNew.password) {

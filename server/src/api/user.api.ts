@@ -6,6 +6,8 @@ import { Router, Response } from 'express';
 import * as bpsr from 'body-parser';
 import { IUser } from 'supplyworks';
 import { UserModel, UserDocument} from '../models/user.model';
+import { EmployerModel, EmployerDocument } from '../models/employer.model';
+import { TokenCheck } from '../utils'
 
 export class UserAPI {
   public router = Router();
@@ -38,6 +40,32 @@ export class UserAPI {
         res.status(500).send('Server error saving file');
       }
     });
+
+    this.router.use((req, res, next) => {
+      TokenCheck(req, res, next);
+    });
+
+    this.router.get('/:id', (req, res) => {
+      console.log('im at the start');
+      EmployerModel.findById(req.params.id, (err, emplr) => {
+        console.log('got the employer');
+        if(err) this.errorHandler(err);
+        else {
+          let users: string[] = [];
+          emplr.employeeId.forEach(id => {
+            UserModel.findById(id, (uErr, user) => {
+              console.log('got user: ', user.firstName);
+              if(err) this.errorHandler(uErr); 
+              else { 
+                users.push(user.toString());
+                if(users.length === emplr.employeeId.length) res.status(200).json({'success':true, 'data':users});
+              }
+            });
+          });
+        }
+      });
+    });
+
   }
 
   errorHandler(error: any, res?: Response) {

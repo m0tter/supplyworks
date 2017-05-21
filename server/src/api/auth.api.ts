@@ -32,7 +32,7 @@ export class AuthAPI {
                 var token = jwt.sign( {'email': user.email, 'isAdmin': user.isAdmin, 'id': user._id, 'employerId': user.employerId}, 
                   AUTH_SECRET, { expiresIn: AUTH_EXPIRY} );
                 user.password = '';
-                res.status(200).json( {'success': true, 'data': {'token': token, 'user': <User>user}} );
+                res.status(200).json( {'success': true, 'data': {'token': token, 'user': <IUser>user}} );
               }
             });
           });

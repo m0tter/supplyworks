@@ -15,7 +15,8 @@
     "baseUrl": ".",
     "paths": {
       "supplyworks": ["../../common/supplyworks"],
-      "api-paths": ["app/_api.paths"]
+      "api-paths": ["app/_api.paths"],
+      "types": ["app/_types"]
     },
     "types": []
   },
