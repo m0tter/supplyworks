@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Location } from '@angular/common';
+import { MdDialog, MdDialogRef } from '@angular/material';
 import { User, Employer } from 'types';
-import { EmployerService, UserService } from '../services'
+import { EmployerService, UserService } from '../services';
+import { UserDialogComponent } from './user-dialog.component';
 
 @Component({
   selector: 'employer-users',
@@ -12,17 +15,16 @@ export class UsersComponent implements OnInit {
   private _error = '';
 
   constructor(
-    private empService: EmployerService,
-    private userService: UserService
+    private _empService: EmployerService,
+    private _userService: UserService,
+    private _location: Location,
+    private _dialog: MdDialog
   ) { }
 
   ngOnInit() {
-    let id = this.empService.employerId;
-    this.debug('ngOnInit','im at the start');
-    this.debug('ngOninit', "id=" + id);
+    let id = this._empService.employerId;
     if(id) {
-      this.debug('ngOninit', 'get emp id');
-      this.userService.getUsers(id)
+      this._userService.getUsers(id)
         .then(res => this._users = res)
         .catch(err => this.errorHandler(err));
     } else {
@@ -30,11 +32,26 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  goBack():void {
+    this._location.back();
+  }
+
+  newUser():void {
+    let dialogRef = this._dialog.open(UserDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this._userService.newUser(result)
+          .then(savedUser => this._users.push(savedUser))
+          .catch(err => this.errorHandler(err))
+      }
+    });
+  }
+
   errorHandler(msg: string): void {
     this._error = msg;
   }
 
   debug(modname,msg:string) {
-    console.log('users.component:' + modname + ' - ' + msg);
+   // console.log('users.component:' + modname + ' - ' + msg);
   }
 }

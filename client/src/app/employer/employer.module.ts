@@ -15,7 +15,7 @@ import { RegisterComponent }  from './register/register.component';
 import { LoginComponent }     from './login/login.component';
 import { EditComponent }      from './edit/edit.component';
 import { UsersComponent }     from './users/users.component';
-import { UserEditComponent }  from './users/user-edit.component';
+import { UserDialogComponent }  from './users/user-dialog.component';
 
 const routes: Routes = [
   { path: '', component: EmployerComponent },
@@ -23,8 +23,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'edit', component: EditComponent },
   { path: 'users', component: UsersComponent },
-  { path: 'users/edit', component: UserEditComponent },
-  { path: 'users/edit/:id', component: UserEditComponent }
+  { path: 'users/edit', component: UserDialogComponent },
+  { path: 'users/edit/:id', component: UserDialogComponent }
 ]
 
 @NgModule({
@@ -34,7 +34,7 @@ const routes: Routes = [
     LoginComponent,
     EditComponent,
     UsersComponent,
-    UserEditComponent
+    UserDialogComponent
   ],
   imports: [
     ReactiveFormsModule,

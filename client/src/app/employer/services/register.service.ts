@@ -5,7 +5,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { API_EMPLOYER } from 'api-paths';
-import { Employer, User } from '../../_types';
+import { Employer, User } from 'types';
 
 import 'rxjs/add/operator/toPromise';
 

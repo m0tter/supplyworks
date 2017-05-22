@@ -17,19 +17,29 @@ export class UserService {
       .toPromise()
       .then(res => {
         let json = res.json();
-        if(json.success) {
-          return Promise.resolve(<User[]>json.data);
-        } else {
-          return Promise.reject(json.data);
-        }
+        if(json.success)
+          return <User[]>json.data;
+        this.errorHandler(json.data);
       })
       .catch(err => this.errorHandler(err));
   }
 
-  private errorHandler(error: any): Promise<any> {
+  public newUser(user:User): Promise<User> {
+    return this.http.post(API_EMPLOYER.user, user, this.authService.authHeader())
+      .toPromise()
+      .then(res => {
+        let json = res.json();
+        if(json.success)
+          return <User>json.data;
+        this.errorHandler(json.data);
+      })
+      .catch(err => this.errorHandler(err));
+  }
+
+  private errorHandler(error: any): void {
     let e = 'An error occurred in UserService: ' + (error.message || error);
     console.log(e);
-    return Promise.reject(e);
+    throw new Error(e);
   }
 
   debug(funcName:string,msg:string) {

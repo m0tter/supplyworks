@@ -1,5 +1,11 @@
-<div>
-  <ul>
-    <li *ngFor="let u of _users; let i = index">{{u.lastName}}</li>
-  </ul>
+<div class="container">
+  <div class="buttonContainer">
+    <span><button type="button" md-raised-button (click)="goBack()">Back</button></span>
+    <span><button type="button" md-raised-button (click)="newUser()">New</button></span>
+  </div>
+  <div>
+    <ul>
+      <li *ngFor="let u of _users; let i = index">{{u.lastName}}, {{u.firstName}}</li>
+    </ul>
+  </div>
 </div>

@@ -40,7 +40,7 @@ export class EmployerService implements OnDestroy{
           let json = res.json();
           if(json.success) {
             this._employer.next(json.data);
-            this.employerId = id;
+            this._employerId = id;
           } else {
             this.errorHandler(json.data);
             return Promise.reject('error loading employer, please check server logs');
@@ -69,6 +69,7 @@ export class EmployerService implements OnDestroy{
   }
 
   public logout() {
+    this._employerId = null;
     this._employer.next(this._initialEmployer);
   }
 

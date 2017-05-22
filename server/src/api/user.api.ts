@@ -51,13 +51,13 @@ export class UserAPI {
         console.log('got the employer');
         if(err) this.errorHandler(err);
         else {
-          let users: string[] = [];
+          let users: IUser[] = [];
           emplr.employeeId.forEach(id => {
             UserModel.findById(id, (uErr, user) => {
               console.log('got user: ', user.firstName);
               if(err) this.errorHandler(uErr); 
               else { 
-                users.push(user.toString());
+                users.push(user);
                 if(users.length === emplr.employeeId.length) res.status(200).json({'success':true, 'data':users});
               }
             });

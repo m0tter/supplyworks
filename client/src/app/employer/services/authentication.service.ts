@@ -24,8 +24,9 @@ export class AuthenticationService {
   constructor(private http: Http) {
     let local = localStorage.getItem('currentUser');
     if(local) {
-      localStorage.removeItem('currentUser');
-      // this._user.next(JSON.parse(local));
+      // localStorage.removeItem('currentUser');
+      this._user.next(JSON.parse(local));
+      this._isLoggedIn.next(true);
     }
   }
 
