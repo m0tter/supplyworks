@@ -9,13 +9,13 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class EmployerService implements OnDestroy{
   private _initialEmployer = new Employer();
-  private _employer: BehaviorSubject<Employer> = new BehaviorSubject<Employer>(this._initialEmployer);
+  private _employer: BehaviorSubject<Employer> = new BehaviorSubject<Employer>(new Employer());
   private _employerId: string;
   private _sub = new Subscription();
 
   set employerId(id: string) {
     this._employerId = id;
-    this.getEmployer();
+    this.getEmployer(id);
   }
 
   get employerId() {
@@ -25,14 +25,19 @@ export class EmployerService implements OnDestroy{
   public readonly employer: Observable<Employer> = this._employer.asObservable();
 
   constructor(private http: Http, private authService: AuthenticationService) {
-    this._sub.add(this.authService.user.subscribe(
-      res => this.employerId = res.employerId,
-      err => this.errorHandler(err)
-    ));
+    this.initialize();
+   }
+
+   private initialize() {
+     this.authService.user
+      .map( emp => this.employerId = emp._id )
+      .catch( err => this.errorHandler(err) )
+      .subscribe();
    }
 
   public getEmployer(empId?: string) {
-    let id = empId || this._employerId;
+    let id = empId;
+    this.debug('getEmployer', 'id='+id);
     if(id) {
       this.http.get(API_EMPLOYER.employer + '/' + id, this.authService.authHeader())
         .toPromise()
@@ -43,7 +48,6 @@ export class EmployerService implements OnDestroy{
             this._employerId = id;
           } else {
             this.errorHandler(json.data);
-            return Promise.reject('error loading employer, please check server logs');
           }
         })
         .catch(err => this.errorHandler(err))
@@ -61,7 +65,6 @@ export class EmployerService implements OnDestroy{
             return <Employer>json.data;
           } else {
             this.errorHandler(json.data);
-            return Promise.reject<Employer>('error saving employer, please check server logs');
           }
         })
         .catch(err => this.errorHandler(err))
@@ -69,16 +72,19 @@ export class EmployerService implements OnDestroy{
   }
 
   public logout() {
-    this._employerId = null;
     this._employer.next(this._initialEmployer);
   }
 
   private errorHandler(error: any): Promise<any> {
     console.error('error in employer.service: ', error.message || error);
-    return Promise.reject(error || 'darn it, EmployerService broke');
+    throw new Error((error || 'darn it, EmployerService broke'));
   }
 
   public ngOnDestroy() {
     this._sub.unsubscribe();
+  }
+
+  private debug(funcName:string, msg:string){
+    console.log('employer.service:' + funcName + ' - ' + msg);
   }
 }
