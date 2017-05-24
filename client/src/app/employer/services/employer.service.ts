@@ -36,7 +36,12 @@ export class EmployerService implements OnDestroy{
   private initialize() {
     this._sub.add(
       this.authService.user
-        .map( user => this.employerId = user.employerId )
+        .map( user => {
+          if(user.employerId)
+            this.employerId = user.employerId;
+          else
+            this.logout();
+        })
         .subscribe()
     );  
   }
