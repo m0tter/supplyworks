@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from './services';
 import { EmployerService } from './services';
+import { ErrorService } from './services';
 import { Employer } from '../_types';
 import { Observable, Subscription } from 'rxjs';
 
@@ -15,15 +16,17 @@ export class EmployerComponent implements OnInit, OnDestroy {
   private _employer: Employer;
   private _subs: Subscription = new Subscription();
   private _isLoggedIn: Boolean;
+  private _error: string;
 
   constructor(
-    private authService: AuthenticationService,
-    private empService: EmployerService
+    private _authService: AuthenticationService,
+    private _empService: EmployerService,
+    private _errorService: ErrorService
   ) { }
 
 
   logout(): void {
-    this.authService.logout();
+    this._authService.logout();
   }
 
   ngOnDestroy() {
@@ -31,12 +34,15 @@ export class EmployerComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
-    this._subs.add(this.empService.employer.subscribe(res => this._employer = res, err => this.errorHandler(err)));
-    this._subs.add(this.authService.isLoggedIn.subscribe(res => this._isLoggedIn = res));
+    this._subs.add(this._errorService.error.subscribe(res => this._error = res));
+    this._subs.add(this._empService.employer.subscribe(res => this._employer = res));
+    this._subs.add(this._authService.isLoggedIn.subscribe(res => this._isLoggedIn = res));
   }
 
   errorHandler(error: any) {
-    console.error('error in employer.component: ', error.message || error);
+    this._errorService.errorHandler(
+      'error in employer.component: ' + (error.message || error)
+    );
   }
 
 }

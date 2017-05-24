@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { User, Employer } from 'types';
-import { EmployerService, UserService } from '../services';
+import { EmployerService, UserService, ErrorService } from '../services';
 import { UserDialogComponent } from './user-dialog.component';
 
 @Component({
@@ -15,6 +15,7 @@ export class UsersComponent implements OnInit {
   private _error = '';
 
   constructor(
+    private _errorService: ErrorService,
     private _empService: EmployerService,
     private _userService: UserService,
     private _location: Location,
@@ -48,7 +49,7 @@ export class UsersComponent implements OnInit {
   }
 
   errorHandler(msg: string): void {
-    this._error = msg;
+    this._errorService.errorHandler(msg);
   }
 
   debug(modname,msg:string) {

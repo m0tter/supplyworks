@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Address } from 'supplyworks';
-import { User, Employer } from '../../_types';
+import { User, Employer } from 'types';
 
 import { RegisterService } from '../services'
 
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
       const formModel = this.registerForm.value;
       this.employer.name = formModel.name;
       this.adminUser = formModel.user;
-      this.employer.address.push(formModel.address);
+      this.employer.address[0] = formModel.address;
 
       this.registerService.Register(this.employer, this.adminUser)
         .then(res => { this.result = JSON.stringify(res); this.registering = false; })

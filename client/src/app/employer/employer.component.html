@@ -1,6 +1,11 @@
-<p *ngIf="_employer">{{_employer.name}}</p>
-<a *ngIf="!_isLoggedIn" routerLink="register">Register</a>
-<a *ngIf="!_isLoggedIn" routerLink="login">Login</a>
-<a *ngIf="_isLoggedIn" routerLink="." (click)="logout()">Logout</a>
-<a *ngIf="_isLoggedIn" routerLink="edit">Edit</a>
-<a *ngIf="_isLoggedIn" routerLink="users">Users</a>
+<app-error></app-error>
+<div *ngIf="!_isLoggedIn">
+  <a routerLink="register">Register</a>
+  <a routerLink="login">Login</a>
+</div>
+<div *ngIf="_isLoggedIn">
+  <p *ngIf="_employer">{{_employer.name}}</p>
+  <a routerLink="." (click)="logout()">Logout</a>
+  <a routerLink="edit">Edit</a>
+  <a routerLink="users">Users</a>
+</div>

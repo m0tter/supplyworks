@@ -5,11 +5,13 @@ import { HttpModule }           from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule }       from '@angular/material';
 
+import { ErrorService }           from './services';
 import { RegisterService }        from './services';
 import { EmployerService }        from './services';
 import { AuthenticationService }  from './services';
 import { UserService }            from './services';
 
+import { ErrorComponent }     from './error/error.component';
 import { EmployerComponent }  from './employer.component';
 import { RegisterComponent }  from './register/register.component';
 import { LoginComponent }     from './login/login.component';
@@ -29,6 +31,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    ErrorComponent,
     EmployerComponent,
     RegisterComponent,
     LoginComponent,
@@ -44,6 +47,7 @@ const routes: Routes = [
     MaterialModule.forRoot()
   ],
   providers: [
+    ErrorService,
     RegisterService,
     EmployerService,
     AuthenticationService,
