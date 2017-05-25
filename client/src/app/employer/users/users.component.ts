@@ -52,7 +52,7 @@ export class UsersComponent implements OnInit {
     this._errorService.errorHandler(msg);
   }
 
-  debug(modname,msg:string) {
+  debug(funcname,msg:string) {
    // console.log('users.component:' + modname + ' - ' + msg);
   }
 }

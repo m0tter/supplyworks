@@ -11,6 +11,8 @@ import { EmployerService }        from './services';
 import { AuthenticationService }  from './services';
 import { UserService }            from './services';
 
+import { AuthGuard }  from './authguard/auth.guard';
+
 import { ErrorComponent }     from './error/error.component';
 import { EmployerComponent }  from './employer.component';
 import { RegisterComponent }  from './register/register.component';
@@ -23,10 +25,14 @@ const routes: Routes = [
   { path: '', component: EmployerComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'edit', component: EditComponent },
-  { path: 'users', component: UsersComponent },
-  { path: 'users/edit', component: UserDialogComponent },
-  { path: 'users/edit/:id', component: UserDialogComponent }
+  { path: 'edit', runGuardsAndResolvers:'always', canActivate:[AuthGuard], component: EditComponent },
+  //{ path: 'users', component: UsersComponent },
+  //{ path: 'users/edit', component: UserDialogComponent },
+  //{ path: 'users/edit/:id', component: UserDialogComponent },
+  { path: 'users', component: UsersComponent, children:[
+      { path: 'edit', component: UserDialogComponent },
+      { path: 'edit/:id', component: UserDialogComponent }
+  ]}
 ]
 
 @NgModule({
