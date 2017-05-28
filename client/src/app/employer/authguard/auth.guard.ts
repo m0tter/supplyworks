@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
+import { Observable } from 'rxjs';
 import { AuthenticationService } from '../services';
 
 @Injectable()
@@ -8,10 +8,15 @@ export class AuthGuard {
   constructor( private _authService: AuthenticationService, private _router: Router ) { }
 
   public canActivate( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): boolean {
-    throw new Error('not implemented');
+    let loggedIn = false;
+    this._authService.isLoggedIn.subscribe(res => loggedIn = res)
+    if(loggedIn) 
+      return true;
+    else 
+      this._router.navigate(['/employer/login']);
   }
 
-  public canActivateChild( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ) {
+  public canActivateChild( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<boolean> {
     return this._authService.isLoggedIn.take(1);
   }
 }

@@ -57,7 +57,8 @@ const routes: Routes = [
     RegisterService,
     EmployerService,
     AuthenticationService,
-    UserService
+    UserService,
+    AuthGuard
   ]
 })
 export class EmployerModule { }

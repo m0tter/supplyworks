@@ -17,9 +17,9 @@ export enum LoginResult {
 export class AuthenticationService {
   private _initialUser = new User();
   private _user: BehaviorSubject<User> = new BehaviorSubject<User>(this._initialUser);
-  private _isLoggedIn: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
+  private _isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public readonly user: Observable<User> = this._user.asObservable();
-  public readonly isLoggedIn: Observable<Boolean> = this._isLoggedIn.asObservable();
+  public readonly isLoggedIn: Observable<boolean> = this._isLoggedIn.asObservable();
 
   constructor(private http: Http) {
     let local = localStorage.getItem('currentUser');
