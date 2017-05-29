@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employer, User } from '../../_types';
 
@@ -14,15 +14,18 @@ export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
   public loggingIn = false;
   public error = '';
+  private _returnUrl: string;
 
   constructor(
     private formBuilder: FormBuilder, 
     private loginService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.buildForm();
+    this._returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/employer';
   }
 
   buildForm():void {
@@ -44,7 +47,7 @@ export class LoginComponent implements OnInit {
         .then(result => {
           this.loggingIn = false;
           if(result === LoginResult.success) {
-            this.router.navigate(['/employer']);
+            this.router.navigate([this._returnUrl]);
           }
           else if(result === LoginResult.failed) { 
             this.error = 'Username or password incorrect';

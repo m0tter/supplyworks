@@ -9,11 +9,11 @@ export class AuthGuard {
 
   public canActivate( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): boolean {
     let loggedIn = false;
+    
     this._authService.isLoggedIn.subscribe(res => loggedIn = res)
-    if(loggedIn) 
-      return true;
-    else 
-      this._router.navigate(['/employer/login']);
+    if(loggedIn) return true;
+    this._router.navigate(['/employer/login'], { queryParams: { returnUrl: state.url }});
+    return false;
   }
 
   public canActivateChild( route: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<boolean> {
