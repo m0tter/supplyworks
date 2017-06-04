@@ -19,7 +19,8 @@ import { RegisterComponent }  from './register/register.component';
 import { LoginComponent }     from './login/login.component';
 import { EditComponent }      from './edit/edit.component';
 import { UsersComponent }     from './users/users.component';
-import { UserDialogComponent }  from './users/user-dialog.component';
+import { UserDialogComponent }  from './users/dialogs/user-dialog.component';
+import { ConfirmDialogComponent} from './dialogs/confirm-dialog.component';
 
 const routes: Routes = [
   { path: '', component: EmployerComponent },
@@ -43,7 +44,8 @@ const routes: Routes = [
     LoginComponent,
     EditComponent,
     UsersComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -59,7 +61,9 @@ const routes: Routes = [
     AuthenticationService,
     UserService,
     AuthGuard
+  ],
+  entryComponents: [
+    ConfirmDialogComponent
   ]
 })
 export class EmployerModule { }
-

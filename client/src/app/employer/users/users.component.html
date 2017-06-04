@@ -6,7 +6,13 @@
   </div>
   <div>
     <ul>
-      <li *ngFor="let u of _users; let i = index">{{u.lastName}}, {{u.firstName}}</li>
+      <li *ngFor="let u of _users; let i = index">
+        <span>{{u.lastName}}, {{u.firstName}}</span>
+        <span>
+          <button type="button" (click)="edit(i)">edit</button>
+          <button type="button" (click)="delete(i)">X</button>
+        </span>
+      </li>
     </ul>
   </div>
 </div>

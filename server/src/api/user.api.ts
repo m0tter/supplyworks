@@ -46,15 +46,12 @@ export class UserAPI {
     });
 
     this.router.get('/:id', (req, res) => {
-      console.log('im at the start');
       EmployerModel.findById(req.params.id, (err, emplr) => {
-        console.log('got the employer');
         if(err) this.errorHandler(err);
         else {
           let users: IUser[] = [];
           emplr.employeeId.forEach(id => {
             UserModel.findById(id, (uErr, user) => {
-              console.log('got user: ', user.firstName);
               if(err) this.errorHandler(uErr); 
               else { 
                 users.push(user);
@@ -63,6 +60,16 @@ export class UserAPI {
             });
           });
         }
+      });
+    });
+
+    this.router.delete('/:id', (req, res) => {
+      EmployerModel.findByIdAndRemove(req.params.id, (err, user) => {
+        if(err) this.errorHandler(err);
+        if(req.params.id == user._id)
+          res.status(200).json({'success': true, 'data':user._id});
+        else
+          res.status(200).json({'success': false, 'data': 'user ID did not match supplied ID'});
       });
     });
 

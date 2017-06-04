@@ -19,4 +19,6 @@ export class User implements IUser {
   employerId = '';
   _id = null;
   token = null;
+
+  get name(): string { return this.firstName + ' ' + this.lastName; }
 }

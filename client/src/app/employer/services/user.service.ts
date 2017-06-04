@@ -36,6 +36,13 @@ export class UserService {
       .catch(err => this.errorHandler(err));
   }
 
+  public deleteUser(user:User): Promise<boolean> {
+    return this.http.delete(API_EMPLOYER.user + '/' + user._id, this.authService.authHeader())
+      .toPromise()
+      .then(res => res.json().success)
+      .catch(err => this.errorHandler(err));
+  }
+
   private errorHandler(error: any): void {
     let e = 'An error occurred in UserService: ' + (error.message || error);
     console.log(e);
