@@ -5,6 +5,7 @@ import { HttpModule }           from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule }       from '@angular/material';
 
+import { DebugService }           from './services';
 import { ErrorService }           from './services';
 import { RegisterService }        from './services';
 import { EmployerService }        from './services';
@@ -55,6 +56,7 @@ const routes: Routes = [
     MaterialModule.forRoot()
   ],
   providers: [
+    DebugService,
     ErrorService,
     RegisterService,
     EmployerService,
@@ -66,4 +68,6 @@ const routes: Routes = [
     ConfirmDialogComponent
   ]
 })
-export class EmployerModule { }
+export class EmployerModule { 
+  constructor( private _debug: DebugService ) { this._debug.DebugEnabled = true; }
+}

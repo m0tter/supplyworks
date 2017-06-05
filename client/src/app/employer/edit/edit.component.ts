@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { EmployerService } from '../services';
-import { Employer } from '../../_types';
+import { EmployerService, UserService } from '../services';
+import { Employer, User } from 'types';
 
 @Component({
   selector: 'app-edit',
@@ -17,15 +17,18 @@ export class EditComponent implements OnInit, OnDestroy {
   private _saving = false;
   private _error: string;
   private _sub = new Subscription();
+  private _users: User[] = [new User()];
 
   constructor(
     private formBuilder: FormBuilder, 
     private empService: EmployerService,
-    private router: Router) { }
+    private router: Router,
+    private userService: UserService) { }
 
   buildForm(): void {
     this.editForm = this.formBuilder.group({
       name: [this._employer.name, Validators.required],
+      contact: this._users,
       address: this.formBuilder.group({
        line1: this._employer.address[0].line1,
        line2: this._employer.address[0].line2,
@@ -61,15 +64,20 @@ export class EditComponent implements OnInit, OnDestroy {
       this.empService.employer
         .map(res => this._employer = res)
         .catch(err => this.errorHandler(err))
-        .do(() => { 
+        .do(() => {
+          this.userService.getUsers(this._employer._id)
+            .then(res => this._users = res)
+            .catch(err => this.errorHandler(err));
+
           this.editForm.setValue({
             name: this._employer.name,
+            contact: this._users,
             address: {
               line1: this._employer.address[0].line1,
               line2: this._employer.address[0].line2,
               suburb: this._employer.address[0].suburb
             }
-          })
+          });
         })
         .subscribe()
     );
