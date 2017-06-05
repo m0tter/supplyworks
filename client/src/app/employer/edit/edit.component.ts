@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { EmployerService, UserService } from '../services';
+import { EmployerService, UserService, DebugService } from '../services';
 import { Employer, User } from 'types';
 
 @Component({
@@ -23,12 +23,13 @@ export class EditComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder, 
     private empService: EmployerService,
     private router: Router,
-    private userService: UserService) { }
+    private userService: UserService,
+    private _debug: DebugService ) { }
 
   buildForm(): void {
     this.editForm = this.formBuilder.group({
       name: [this._employer.name, Validators.required],
-      contact: this._users,
+      contact: '',
       address: this.formBuilder.group({
        line1: this._employer.address[0].line1,
        line2: this._employer.address[0].line2,
@@ -66,12 +67,12 @@ export class EditComponent implements OnInit, OnDestroy {
         .catch(err => this.errorHandler(err))
         .do(() => {
           this.userService.getUsers(this._employer._id)
-            .then(res => this._users = res)
+            .then(res => { this._users = res; this.debug('ngOnInit','users=' + JSON.stringify(this._users)); })
             .catch(err => this.errorHandler(err));
 
           this.editForm.setValue({
             name: this._employer.name,
-            contact: this._users,
+            contact: '',
             address: {
               line1: this._employer.address[0].line1,
               line2: this._employer.address[0].line2,
@@ -91,6 +92,10 @@ export class EditComponent implements OnInit, OnDestroy {
     console.error('edit component is broken: ', error);
     this._error = error.message || error;
     return Observable.throw(error);
+  }
+
+  private debug(funcName:string,msg:string):void {
+   // this._debug.log('user.service:' + funcName + ' - ' + msg);
   }
 
 }
