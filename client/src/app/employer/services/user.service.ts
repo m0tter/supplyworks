@@ -36,10 +36,11 @@ export class UserService {
       .catch(err => this.errorHandler(err));
   }
 
-  public deleteUser(user:User): Promise<boolean> {
-    return this.http.delete(API_EMPLOYER.user + '/' + user._id, this.authService.authHeader())
+  public deleteUser(id:string): Promise<boolean> {
+    return this.http.delete(API_EMPLOYER.user + '/' + id, this.authService.authHeader())
       .toPromise()
-      .then(res => res.json().success)
+      .then(res => {
+        let json = res.json())
       .catch(err => this.errorHandler(err));
   }
 

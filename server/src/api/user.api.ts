@@ -65,18 +65,24 @@ export class UserAPI {
 
     this.router.delete('/:id', (req, res) => {
       UserModel.findById(req.params.id, (userErr, userDoc) => {
-        
-      })
-      EmployerModel.findById(req.params.id, (err, user) => {
-        if(err) this.errorHandler(err);
-        if(req.params.id == user._id)
-          res.status(200).json({'success': true, 'data':user._id});
-        else
-          res.status(200).json({'success': false, 'data': 'user ID did not match supplied ID'});
+        if(userErr) this.errorHandler(userErr);
+        if(userDoc) {
+          EmployerModel.find({'contactId': req.params.id}, (empErr, empDoc) => {
+            if(empErr) this.errorHandler(empErr);
+            if(empDoc) {
+              res.status(200).json({'success': false, 'data': 'user is the employer contact, please change contact before removing the user'});
+            } else {
+              userDoc.remove();
+              res.status(200).json({'success': true});
+            }
+          });
+        } else { 
+          res.status(200).json({'success': false, data: 'user not found'});
+        }
       });
     });
-
-  }
+    
+  } // end router
 
   errorHandler(error: any, res?: Response) {
     console.error('Error in userAPI: ' + error.message || error);

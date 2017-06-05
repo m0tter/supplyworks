@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from '../dialogs/confirm-dialog.component';
 })
 export class UsersComponent implements OnInit {
   private _users: User[];
+  private _user: User;
   private _error = '';
 
   constructor(
@@ -54,11 +55,15 @@ export class UsersComponent implements OnInit {
   }
 
   delete($idx:number):void {
+    this._user = this._users[$idx];
+    this.debug('delete','$idx=' + $idx);
+    this.debug('delete', 'user id=' + this._user._id);
     let dialogRef = this._dialog.open(ConfirmDialogComponent);
-    dialogRef.componentInstance.setMessage('Are you sure you want to delete ' + this._users[$idx].name);
+    dialogRef.componentInstance.setMessage('Are you sure you want to delete ' + this._user.name);
     dialogRef.afterClosed().subscribe(result => {
-      if(result) { 
-        this._userService.deleteUser(this._users[$idx]._id)
+      if(result) {
+        this.debug('delete','result user id=' + this._user._id);
+        this._userService.deleteUser(this._user._id)
           .then(res => { 
             if(res) this._users.splice($idx, 1); 
             else 
@@ -72,7 +77,7 @@ export class UsersComponent implements OnInit {
     this._errorService.errorHandler(msg);
   }
 
-  debug(funcname,msg:string) {
-   // console.log('users.component:' + modname + ' - ' + msg);
+  debug(funcname:string,msg:string) {
+   console.log('users.component:' + funcname + ' - ' + msg);
   }
 }
