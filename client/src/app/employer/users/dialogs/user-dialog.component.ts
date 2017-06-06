@@ -20,11 +20,12 @@ export class UserDialogComponent implements OnInit {
     private formBuilder: FormBuilder
   ) { }
 
-   buildForm() { 
+  buildForm() {
     this.userForm = this.formBuilder.group({
       firstName:  [this.user.firstName, Validators.required],
       lastName:   [this.user.lastName, Validators.required],
       email:      [this.user.email, Validators.required],
+      mobile:     [this.user.mobilePhone, Validators.required],
       password: '',
       isAdmin: '',
       canEdit: ''
@@ -32,6 +33,8 @@ export class UserDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.user) this._newUser = false;
+    else this.user = new User();
     this.buildForm();
   }
 }

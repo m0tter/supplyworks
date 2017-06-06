@@ -72,7 +72,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
           this.editForm.setValue({
             name: this._employer.name,
-            contact: '',
+            contact: this._employer.contactId,
             address: {
               line1: this._employer.address[0].line1,
               line2: this._employer.address[0].line2,

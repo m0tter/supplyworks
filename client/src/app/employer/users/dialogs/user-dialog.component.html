@@ -7,15 +7,18 @@
       <md-input-container>
         <input mdInput formControlName="email" placeholder="Email" size="40">
       </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="firstName" placeholder="First Name" size="40">
+        <input mdInput formControlName="lastName" placeholder="Last Name" size="40">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput formControlName="mobile" placeholder="Mobile" size="30">
+      </md-input-container>
     </div>
     <div *ngIf="_newUser">
       <md-input-container>
         <input mdInput formControlName="password" placeholder="Password" type="password">
       </md-input-container>
-    </div>
-    <div>
-      <span><md-checkbox formControlName="isAdmin">Is Admin</md-checkbox></span>
-      <span class="chkbox"><md-checkbox formControlName="canEdit">Can Edit</md-checkbox></span>
     </div>
   </form>
 </div>

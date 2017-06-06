@@ -22,9 +22,9 @@
         </md-input-container>
       </div>
     </div>
-    <div>
+    <div class="contact">
       <md-select placeholder="Contact" formControlName="contact">
-        <md-option *ngFor="let user of _users" [value]="user._id">{{user.lastName}}</md-option>
+        <md-option *ngFor="let user of _users" [value]="user._id">{{user.lastName}}, {{user.firstName}}</md-option>
       </md-select>
     </div> 
     <div class="buttonContainer">
