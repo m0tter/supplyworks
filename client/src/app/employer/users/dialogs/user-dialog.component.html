@@ -7,12 +7,22 @@
       <md-input-container>
         <input mdInput formControlName="email" placeholder="Email" size="40">
       </md-input-container>
+    </div>
+    <div>
+      <span>
+        <md-input-container>
+          <input mdInput formControlName="firstName" placeholder="First Name" size="15">
+        </md-input-container>
+      </span>
+      <span>
+        <md-input-container>
+          <input mdInput formControlName="lastName" placeholder="Last Name" size="15">
+        </md-input-container>
+      </span>
+    </div>
+    <div>
       <md-input-container>
-        <input mdInput formControlName="firstName" placeholder="First Name" size="40">
-        <input mdInput formControlName="lastName" placeholder="Last Name" size="40">
-      </md-input-container>
-      <md-input-container>
-        <input mdInput formControlName="mobile" placeholder="Mobile" size="30">
+        <input mdInput formControlName="mobile" placeholder="Mobile" size="20">
       </md-input-container>
     </div>
     <div *ngIf="_newUser">
