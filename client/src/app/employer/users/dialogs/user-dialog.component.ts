@@ -37,4 +37,34 @@ export class UserDialogComponent implements OnInit {
     else this.user = new User();
     this.buildForm();
   }
+
+  save() {
+    if(this.userForm.dirty && this.userForm.valid) {
+      let formModel = this.userForm.value;
+      this.user.email = formModel.email;
+      this.user.firstName = formModel.firstName;
+      this.user.lastName = formModel.lastName;
+      this.user.mobilePhone = formModel.mobile;
+      this.user.password = formModel.password;
+      this.user.isAdmin = formModel.isAdmin;
+
+      this.dialogRef.close(this.user);
+    }
+  }
 }
+
+/*
+  doRegister(): void {
+    this.registering = true;
+    if(this.registerForm.dirty && this.registerForm.valid) {
+      const formModel = this.registerForm.value;
+      this.employer.name = formModel.name;
+      this.adminUser = formModel.user;
+      this.employer.address[0] = formModel.address;
+
+      this.registerService.Register(this.employer, this.adminUser)
+        .then(res => { this.result = JSON.stringify(res); this.registering = false; })
+        .catch( err => { this.result = err; this.registering = false; });
+    }
+  }
+  */

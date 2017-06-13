@@ -42,7 +42,9 @@ export class UsersComponent implements OnInit {
   newUser():void {
     let dialogRef = this._dialog.open(UserDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
-      if(result) {
+      let user = <User>result;
+      if(user) {
+        user.employerId = this._empService.employerId;
         this._userService.newUser(result)
           .then(savedUser => this._users.push(savedUser))
           .catch(err => this.errorHandler(err))
@@ -59,7 +61,8 @@ export class UsersComponent implements OnInit {
     this.debug('delete','$idx=' + $idx);
     this.debug('delete', 'user id=' + this._user._id);
     let dialogRef = this._dialog.open(ConfirmDialogComponent);
-    dialogRef.componentInstance.setMessage('Are you sure you want to delete ' + this._user.name);
+    dialogRef.componentInstance.setMessage(
+      'Are you sure you want to delete ' + this._user.firstName + ' ' + this._user.lastName);
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
         this.debug('delete','result user id=' + this._user._id);

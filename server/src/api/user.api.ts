@@ -23,14 +23,22 @@ export class UserAPI {
           userDoc.password  = userNew.password;
           userDoc.firstName = userNew.firstName;
           userDoc.lastName  = userNew.lastName;
-          if(userNew.employerId) {
-            // TODO update employer records with user ID
-          }
+          if(userNew.mobilePhone) userDoc.mobilePhone = userNew.mobilePhone;
+          userDoc.isAdmin = true && userNew.isAdmin; 
           
           userDoc.save((err, result) => {
             if(err) { this.errorHandler(err, res); }
             else {
-              res.status(200).json({'success': true, 'data': result});
+              if(userNew.employerId) {
+                EmployerModel.findByIdAndUpdate(userNew.employerId, 
+                {$push: {'employeeId': result._id}},(err, emp) => {
+                  if(err) this.errorHandler('Error updating employer record with employee id', res);
+                  res.status(200).json({'success': true, 'data': result});
+                });
+              } 
+              else { 
+                res.status(200).json({'success': true, 'data': result});
+              }
             }
           });
         } else {

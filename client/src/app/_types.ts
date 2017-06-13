@@ -20,5 +20,5 @@ export class User implements IUser {
   _id = null;
   token = null;
 
-  get name(): string { return this.firstName + ' ' + this.lastName; }
+  name(): string { return this.firstName + ' ' + this.lastName; }
 }
