@@ -66,7 +66,7 @@ export class UsersComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
         this.debug('delete','result user id=' + this._user._id);
-        this._userService.deleteUser(this._user._id)
+        this._userService.deleteUser(this._user._id, this._empService.employerId)
           .then(res => { 
             if(res) this._users.splice($idx, 1); 
             else 
@@ -81,6 +81,6 @@ export class UsersComponent implements OnInit {
   }
 
   debug(funcname:string,msg:string) {
-   console.log('users.component:' + funcname + ' - ' + msg);
+  // console.log('users.component:' + funcname + ' - ' + msg);
   }
 }

@@ -9,8 +9,8 @@
       <li *ngFor="let u of _users; let i = index" class="user-item">
         <span>{{u.lastName}}, {{u.firstName}}</span>
         <span>
-          <button type="button" (click)="edit(i)">edit</button>
-          <button type="button" (click)="delete(i)">X</button>
+          <button class="user-button" type="button" (click)="edit(i)"><i class="fa fa-fw fa-pencil"></i></button>
+          <button class="user-button" type="button" (click)="delete(i)"><i class="fa fa-fw fa-close"></i></button>
         </span>
       </li>
     </ul>
