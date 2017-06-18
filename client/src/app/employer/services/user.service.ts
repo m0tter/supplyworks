@@ -49,6 +49,19 @@ export class UserService {
       .catch(err => this.errorHandler(err));
   }
 
+  public editUser(user:User): Promise<boolean> {
+    return this.http.put(API_EMPLOYER.user + '/' + user._id, user, this.authService.authHeader())
+      .toPromise()
+      .then(res => {
+        let json = res.json();
+        if(json.success)
+          return json.data;
+        else
+          this.errorHandler(json.data);
+      })
+      .catch(err => this.errorHandler(err));
+  }
+
   private errorHandler(error: any): void {
     let e = 'An error occurred in UserService: ' + (error.message || error);
     console.log(e);

@@ -71,51 +71,46 @@ export class UserAPI {
       });
     });
 
+    this.router.put('/:id', bpsr.json(), (req, res) => {
+      let user = <IUser>req.body;
+      UserModel.findById(user._id, (err, doc) => {
+        if(err) this.errorHandler(err, res);
+        else {
+          if(user.email       != doc.email)       doc.email       = user.email;
+          if(user.firstName   != doc.firstName)   doc.firstName   = user.firstName;
+          if(user.lastName    != doc.lastName)    doc.lastName    = user.lastName;
+          if(user.mobilePhone != doc.mobilePhone) doc.mobilePhone = user.mobilePhone;
+          if(user.isAdmin     != doc.isAdmin)     doc.isAdmin     = user.isAdmin;
+
+          doc.save((err, result) => {
+            if(err) this.errorHandler(err, res);
+            else {
+              res.status(200).json({'success': true, 'data': result});
+            }
+          });
+        }
+      });
+    });
+
     this.router.delete('/:emId/:eeId', (req, res) => {
       EmployerModel.findOne({'contactId': req.params.eeId}, (err, doc) => {
         if(err) this.errorHandler(err, res);
-        if(doc) 
+        if(doc) { // found the employee is still the registered contact
           return res.status(200).json({'success': false, 
             'data': 'user is the employer contact. Change contact before deleting'});
+        } else {
+          // remove the employeeId from the employer record but don't delete the user record
+          EmployerModel.findByIdAndUpdate(req.params.emId,
+            {$pull: {'employeeId': req.params.eeId}},
+            (err, updateDoc) => {
+              if(err) this.errorHandler(err, res);
+              if(updateDoc)
+                res.status(200).json({'success': true});
+              else
+                res.status(204).json({'success': false, 'data': 'employer not found'});
+          });
+        }
       });
-      EmployerModel.findByIdAndUpdate(req.params.emId,
-        {$pull: {'employeeId': req.params.eeId}},
-        (err, doc) => {
-          if(err) this.errorHandler(err, res);
-          if(doc)
-            res.status(200).json({'success': true});
-          else
-            res.status(204).json({'success': false, 'data': 'employer not found'});
-      });
-      // UserModel.findById(req.params.id, (userErr, userDoc) => {
-      //   if(userErr) this.errorHandler(userErr);
-      //   if(userDoc) {
-      //     console.log('got userdoc=',JSON.stringify(userDoc));
-      //     if(userDoc.employerId) {
-      //       console.log('userDoc.employerId=',JSON.stringify(userDoc));
-      //       EmployerModel.findOne({'contactId': req.params.id}, (err, doc) => {
-      //         console.log('doc=',JSON.stringify(doc));
-      //         if(err) this.errorHandler(err);
-      //         if(doc && doc._id) {
-      //           res.status(200).json({'success': false, 'data': 'user is the employer contact, please change contact before removing the user'});
-      //         } else {
-      //           EmployerModel.findByIdAndUpdate(userDoc.employerId,
-      //             {$pull: {'employeeId': userDoc._id}}, (err, result) => {
-      //             if(err) this.errorHandler(err);
-      //             console.log('remove employeeid');
-      //             userDoc.remove();
-      //             res.status(200).json({'success': true});
-      //           });
-      //         }
-      //       });
-      //     } else {    
-      //       userDoc.remove();
-      //       res.status(200).json({'success': true});
-      //     }
-      //   } else { 
-      //     res.status(200).json({'success': false, data: 'user not found'});
-      //   }
-      // });
     });
     
   } // end router

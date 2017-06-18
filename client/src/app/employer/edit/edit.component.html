@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="contact">
-      <md-select placeholder="Contact" formControlName="contact">
+      <md-select placeholder="Contact" formControlName="contactId" class="dropdown">
         <md-option *ngFor="let user of _users" [value]="user._id">{{user.lastName}}, {{user.firstName}}</md-option>
       </md-select>
     </div> 

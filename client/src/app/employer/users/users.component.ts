@@ -53,19 +53,26 @@ export class UsersComponent implements OnInit {
   }
 
   edit($index:number):void {
+    let copy = JSON.parse(JSON.stringify(this._users[$index]));
     let dialogRef = this._dialog.open(UserDialogComponent);
+    dialogRef.componentInstance.user = copy;
+    dialogRef.afterClosed().subscribe(result => {
+      let user = <User>result;
+      if(user) {
+        this._userService.editUser(user)
+          .then(result => this._users.splice($index, 1, user))
+          .catch(err => this.errorHandler(err))
+      }
+    });
   }
 
   delete($idx:number):void {
     this._user = this._users[$idx];
-    this.debug('delete','$idx=' + $idx);
-    this.debug('delete', 'user id=' + this._user._id);
     let dialogRef = this._dialog.open(ConfirmDialogComponent);
     dialogRef.componentInstance.setMessage(
       'Are you sure you want to delete ' + this._user.firstName + ' ' + this._user.lastName);
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.debug('delete','result user id=' + this._user._id);
         this._userService.deleteUser(this._user._id, this._empService.employerId)
           .then(res => { 
             if(res) this._users.splice($idx, 1); 

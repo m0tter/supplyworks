@@ -4,7 +4,7 @@ import { API_EMPLOYER } from 'api-paths';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from './';
 import { ErrorService } from './error.service';
-import { Employer, User } from '../../_types';
+import { Employer, User } from 'types';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -13,6 +13,7 @@ export class EmployerService implements OnDestroy{
   private _employer: BehaviorSubject<Employer> = new BehaviorSubject<Employer>(this._initialEmployer);
   private _employerId: string;
   private _sub = new Subscription();
+  private _debug = false;
 
   set employerId(id: string) {
     this._employerId = id;
@@ -67,6 +68,7 @@ export class EmployerService implements OnDestroy{
   }
 
   public saveEmployer(employer: Employer): Promise<Employer> {
+    this.debug('saveEmployer','employer=' + JSON.stringify(employer));
     if(employer) {
       return this.http.put(API_EMPLOYER.employer + '/' + employer._id, employer, this.authService.authHeader())
         .toPromise()
@@ -97,6 +99,7 @@ export class EmployerService implements OnDestroy{
   }
 
   private debug(funcName:string, msg:string){
-    // console.log('employer.service:' + funcName + ' - ' + msg);
+    if(this._debug)
+      console.log('employer.service:' + funcName + ' - ' + msg);
   }
 }

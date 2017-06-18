@@ -29,11 +29,11 @@ export class EditComponent implements OnInit, OnDestroy {
   buildForm(): void {
     this.editForm = this.formBuilder.group({
       name: [this._employer.name, Validators.required],
-      contact: '',
+      contactId: this._employer.contactId,
       address: this.formBuilder.group({
-       line1: this._employer.address[0].line1,
-       line2: this._employer.address[0].line2,
-       suburb: this._employer.address[0].suburb
+        line1: this._employer.address[0].line1,
+        line2: this._employer.address[0].line2,
+        suburb: this._employer.address[0].suburb
       })
     });
   }
@@ -45,7 +45,7 @@ export class EditComponent implements OnInit, OnDestroy {
       this._employer = this.editForm.value;
       this._employer._id = id;
       if(this._employer._id) {
-        this.empService.saveEmployer(this._employer as Employer)
+        this.empService.saveEmployer(this._employer)
           .then(res => this.router.navigate(['employer']))
           .catch(err => this._error = err);
       } else {
@@ -72,7 +72,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
           this.editForm.setValue({
             name: this._employer.name,
-            contact: this._employer.contactId,
+            contactId: this._employer.contactId,
             address: {
               line1: this._employer.address[0].line1,
               line2: this._employer.address[0].line2,

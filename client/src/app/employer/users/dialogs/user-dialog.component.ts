@@ -27,7 +27,7 @@ export class UserDialogComponent implements OnInit {
       email:      [this.user.email, Validators.required],
       mobile:     [this.user.mobilePhone, Validators.required],
       password: '',
-      isAdmin: '',
+      isAdmin: this.user.isAdmin,
       canEdit: ''
     });
   }

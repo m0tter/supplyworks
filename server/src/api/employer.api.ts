@@ -17,6 +17,8 @@ import {
 } from '../models/employer.model';
 
 export class EmployerAPI {
+  private _debug = false;
+
   public router = Router();
 
   constructor() { this.buildRouter(); }
@@ -117,7 +119,7 @@ export class EmployerAPI {
     });
 
     this.router.put('/:id', bpsr.json(), (req: AuthRequest, res) => {
-       console.log('id:' + JSON.stringify(req.params.id));
+      console.log('id:' + JSON.stringify(req.params.id));
       if( req.params.id ){
         EmployerModel.findById(req.params.id, (err, doc) => {
           if(err) {
@@ -128,7 +130,8 @@ export class EmployerAPI {
                 let data = req.body as IEmployer;
                 if(data.name) doc.name = data.name;
                 if(data.address) doc.address = data.address;
-                // if(data.contact) doc.contact = data.contact;
+                this.debug('put','contactId=' + data.contactId);
+                if(data.contactId) doc.contactId = data.contactId;
                 doc.save((err, result) => {
                   if(err){
                     this.errorHandler(err, res);
@@ -153,5 +156,10 @@ export class EmployerAPI {
     if(res) {
       res.status(500).send(error.message || error);
     }
+  }
+
+  debug(funcName:string, msg:string):void {
+    if(this._debug)
+      console.log('employer.api:' + funcName + ":" + msg);
   }
 }
