@@ -11,6 +11,7 @@ import { RegisterService }        from './services';
 import { EmployerService }        from './services';
 import { AuthenticationService }  from './services';
 import { UserService }            from './services';
+import { AgreementService }       from './services';
 
 import { AuthGuard }  from './authguard/auth.guard';
 
@@ -28,13 +29,11 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'edit', runGuardsAndResolvers:'always', canActivate:[AuthGuard], component: EditComponent },
-  //{ path: 'users', component: UsersComponent },
-  //{ path: 'users/edit', component: UserDialogComponent },
-  //{ path: 'users/edit/:id', component: UserDialogComponent },
   { path: 'users', component: UsersComponent, children:[
       { path: 'edit', component: UserDialogComponent },
       { path: 'edit/:id', component: UserDialogComponent }
-  ]}
+  ]},
+  { path: 'agreements', loadChildren: './agreements/agreements.module#AgreementsModule' }
 ]
 
 @NgModule({
@@ -62,7 +61,8 @@ const routes: Routes = [
     EmployerService,
     AuthenticationService,
     UserService,
-    AuthGuard
+    AuthGuard,
+    AgreementService
   ],
   entryComponents: [
     ConfirmDialogComponent

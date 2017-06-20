@@ -5,7 +5,8 @@
 </div>
 <div *ngIf="_isLoggedIn">
   <p *ngIf="_employer">{{_employer.name}}</p>
-  <a routerLink="." (click)="logout()">Logout</a>
+  <a href="javascript:void(0)" (click)="logout()">Logout</a>
   <a routerLink="edit">Edit</a>
   <a routerLink="users">Users</a>
+  <a routerLink="agreements">Agreements</a>
 </div>
