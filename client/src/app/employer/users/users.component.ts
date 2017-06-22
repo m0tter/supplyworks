@@ -4,7 +4,7 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 import { User, Employer } from 'types';
 import { EmployerService, UserService, ErrorService } from '../services';
 import { UserDialogComponent } from './dialogs/user-dialog.component';
-import { ConfirmDialogComponent } from '../dialogs/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../shared/dialogs/confirm-dialog.component';
 
 @Component({
   selector: 'employer-users',
