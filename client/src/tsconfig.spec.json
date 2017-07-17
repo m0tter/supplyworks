@@ -11,7 +11,12 @@
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
     "target": "es5",
-    "baseUrl": "",
+    "baseUrl": ".",
+    "paths": {
+      "supplyworks": ["../../common/supplyworks"],
+      "api-paths": ["app/_api.paths"],
+      "types": ["app/_types"]
+    },
     "types": [
       "jasmine",
       "node"

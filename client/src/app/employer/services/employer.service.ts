@@ -67,22 +67,46 @@ export class EmployerService implements OnDestroy{
     } else this._employer.next(this._initialEmployer);
   }
 
+  // public saveEmployerOld(employer: Employer): Promise<Employer> {
+  //   this.debug('saveEmployer','employer=' + JSON.stringify(employer));
+  //   if(employer) {
+  //     return this.http.put(API_EMPLOYER.employer + '/' + employer._id, employer, this.authService.authHeader())
+  //       .toPromise()
+  //       .then(res => {
+  //         let json = res.json();
+  //         if(json.success) {
+  //           this._employer.next(json.data);
+  //           return <Employer>json.data;
+  //         } else {
+  //           this.errorHandler(json.data);
+  //           return new Employer();
+  //         }
+  //       })
+  //       .catch(err => this.errorHandler(err))
+  //   } else {
+  //     return Promise.reject('no employer was passed to save');
+  //   }
+  // }
+
   public saveEmployer(employer: Employer): Promise<Employer> {
-    this.debug('saveEmployer','employer=' + JSON.stringify(employer));
-    if(employer) {
-      return this.http.put(API_EMPLOYER.employer + '/' + employer._id, employer, this.authService.authHeader())
-        .toPromise()
-        .then(res => {
-          let json = res.json();
-          if(json.success) {
-            this._employer.next(json.data);
-            return <Employer>json.data;
-          } else {
-            this.errorHandler(json.data);
-          }
-        })
-        .catch(err => this.errorHandler(err))
-    }
+    return new Promise((resolve, reject) => {
+      if(employer) {
+        this.http.put(`${API_EMPLOYER.employer}/${employer._id}`, employer, this.authService.authHeader())
+          .toPromise()
+          .then(res => {
+            let json = res.json();
+            if(json.success) {
+              this._employer.next(json.data);
+              resolve(json.data);
+            } else {
+              reject(json.data);
+            }
+          })
+          .catch(err => reject(err));
+      } else {
+        reject('no employer was passed to save');
+      }
+    });
   }
 
   public logout() {

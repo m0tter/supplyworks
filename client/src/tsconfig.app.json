@@ -18,7 +18,8 @@
       "api-paths": ["app/_api.paths"],
       "types": ["app/_types"]
     },
-    "types": []
+    "types": [],
+    "skipLibCheck": true
   },
   "exclude": [
     "test.ts",

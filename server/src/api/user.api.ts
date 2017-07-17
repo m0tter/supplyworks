@@ -1,18 +1,25 @@
-// file:    /api/user.api.ts
-// author:  sjosephs
-// date:    050417
+/**
+ * @author: sjosephs
+ * @since: 2017-04-05
+ * @see: /api/user.api.ts
+ * @desc: supplyworks api for user management
+ */
 
 import { Router, Response } from 'express';
 import * as bpsr from 'body-parser';
 import { IUser } from 'supplyworks';
 import { UserModel, UserDocument} from '../models/user.model';
 import { EmployerModel, EmployerDocument } from '../models/employer.model';
-import { TokenCheck } from '../utils'
+import { TokenCheck } from '../utils';
+import { AuthRequest } from 'types';
 
 export class UserAPI {
   public router = Router();
 
-  constructor() { 
+  constructor() {
+// ****************
+// **  new user  **
+// ****************
     this.router.post('/', bpsr.json(), (req, res) => {
       let userNew = req.body as IUser;
       let userDoc = new UserModel;
@@ -27,7 +34,13 @@ export class UserAPI {
           userDoc.isAdmin = true && userNew.isAdmin; 
           
           userDoc.save((err, result) => {
-            if(err) { this.errorHandler(err, res); }
+            if(err) { 
+              if( err.code && err.code === 11000 ) {
+                res.status(200).json({'success': false, data: err});
+              } else {
+                this.errorHandler(err, res);
+              }
+            }
             else {
               if(userNew.employerId) {
                 EmployerModel.findByIdAndUpdate(userNew.employerId, 
@@ -49,10 +62,17 @@ export class UserAPI {
       }
     });
 
+// ************************
+// **  protected routes  **
+// ************************
     this.router.use((req, res, next) => {
       TokenCheck(req, res, next);
     });
 
+// *****************
+// **  get users  **
+// *****************
+    // finds all employees for the given employer
     this.router.get('/:id', (req, res) => {
       EmployerModel.findById(req.params.id, (err, emplr) => {
         if(err) this.errorHandler(err);
@@ -71,6 +91,16 @@ export class UserAPI {
       });
     });
 
+    this.router.get('/', (req:AuthRequest, res) => {
+      this.getUsers(req.token.employerId, (users) => {
+        if(users) res.status(200).json({'success': true, 'data': users});
+        else res.status(204).json({'success': true});
+      });
+    });
+
+// *******************
+// **  update user  **
+// *******************
     this.router.put('/:id', bpsr.json(), (req, res) => {
       let user = <IUser>req.body;
       UserModel.findById(user._id, (err, doc) => {
@@ -92,6 +122,9 @@ export class UserAPI {
       });
     });
 
+// *******************
+// **  delete user  **
+// *******************
     this.router.delete('/:emId/:eeId', (req, res) => {
       EmployerModel.findOne({'contactId': req.params.eeId}, (err, doc) => {
         if(err) this.errorHandler(err, res);
@@ -114,6 +147,24 @@ export class UserAPI {
     });
     
   } // end router
+
+  getUsers(employerId:string, cb:(result:IUser[])=>void) {
+    EmployerModel.findById(employerId, (err, emplr) => {
+      if(err) this.errorHandler(err);
+      else {
+        let users: IUser[] = [];
+        emplr.employeeId.forEach(id => {
+          UserModel.findById(id, (uErr, user) => {
+            if(err) this.errorHandler(uErr); 
+            else { 
+              users.push(user);
+              if(users.length === emplr.employeeId.length) cb(users);
+            }
+          });
+        });
+      }
+    });
+  }
 
   errorHandler(error: any, res?: Response) {
     console.error('Error in userAPI: ' + error.message || error);

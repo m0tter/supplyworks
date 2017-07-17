@@ -11,7 +11,7 @@ import { LoginComponent } from './login.component';
     CommonModule,
     LoginRoutingModule,
     ReactiveFormsModule,
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   declarations: [LoginComponent]
 })

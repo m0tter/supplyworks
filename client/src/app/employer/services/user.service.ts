@@ -13,8 +13,10 @@ export class UserService {
     private _debug: DebugService
   ) { }
   
-  public getUsers(empId: string): Promise<User[]> {
-    return this.http.get(API_EMPLOYER.user + '/' + empId , this.authService.authHeader())
+  public getUsers(empId?: string): Promise<User[]> {
+    let url = API_EMPLOYER.user;
+    if(empId) url = `${url}/${empId}`;
+    return this.http.get(url , this.authService.authHeader())
       .toPromise()
       .then(res => {
         let json = res.json();
@@ -22,7 +24,7 @@ export class UserService {
           return <User[]>json.data;
         this.errorHandler(json.data);
       })
-      .catch(err => this.errorHandler(err));
+      .catch(err => this.errorHandler(err)) as Promise<User[]>;
   }
 
   public newUser(user:User): Promise<User> {
@@ -30,11 +32,20 @@ export class UserService {
       .toPromise()
       .then(res => {
         let json = res.json();
-        if(json.success)
+        if(json.success) {
           return <User>json.data;
-        this.errorHandler(json.data);
+        } else {
+          if(json.data && json.data.code) {
+            if(json.data.code === 11000) 
+              this.errorHandler('A user with the same email address already exists');
+            else
+              this.errorHandler('An unknown error has occurred saving the user, ' + json.data.message);
+          } else {
+            this.errorHandler(json.data);
+          }
+        }
       })
-      .catch(err => this.errorHandler(err));
+      .catch(err => this.errorHandler(err)) as Promise<User>;
   }
 
   public deleteUser(eeId:string, emId:string): Promise<boolean> {
@@ -46,7 +57,7 @@ export class UserService {
           this.errorHandler(json.data);
         else return true;
       })
-      .catch(err => this.errorHandler(err));
+      .catch(err => this.errorHandler(err)) as Promise<boolean>;
   }
 
   public editUser(user:User): Promise<boolean> {

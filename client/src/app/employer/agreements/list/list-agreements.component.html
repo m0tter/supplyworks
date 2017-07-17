@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="buttonContainer">
+    <span><button type="button" md-raised-button (click)="goHome()">Home</button></span>
+    <span><button type="button" md-raised-button (click)="newAgreement()">New</button></span>
+  </div>
+  <div class="datatable">
+    <md-table #table [dataSource]="_data">
+      <ng-container cdkColumnDef="name" class="col-name">
+        <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+        <md-cell *cdkCellDef="let row">{{row.name}}</md-cell>
+      </ng-container>
+      <ng-container cdkColumnDef="type" class="col-type">
+        <md-header-cell *cdkHeaderCellDef> Type </md-header-cell>
+        <md-cell *cdkCellDef="let row">{{row.agreementType}}</md-cell>
+      </ng-container>
+      <ng-container cdkColumnDef="count" class="col-count">
+        <md-header-cell *cdkHeaderCellDef> Members </md-header-cell>
+        <md-cell *cdkCellDef="let row">{{row.memberId.length}}</md-cell>
+      </ng-container>
+      <ng-container cdkColumnDef="actions" class="col-actions">
+        <md-header-cell *cdkHeaderCellDef> </md-header-cell>
+        <md-cell *cdkCellDef="let row"> 
+          <button type="button" (click)="edit(row)"><i class="fa fa-pencil"></i></button>
+          <button type="button" (click)="delete(row)"><i class="fa fa-close"></i></button>
+        </md-cell>
+      </ng-container>
+      <md-header-row *cdkHeaderRowDef="['name', 'type', 'count', 'actions']"></md-header-row>
+      <md-row *cdkRowDef="let row; columns: ['name', 'type', 'count', 'actions']"></md-row>
+    </md-table>
+    <ng-template #noItems><p>No agreements to display</p></ng-template>
+  </div>
+</div>

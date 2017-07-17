@@ -31,6 +31,15 @@ declare module 'supplyworks' {
     _id: any;
   }
 
+  export interface IAgreement {
+    name: string;
+    agreementType: number;
+    employerId: string;
+    memberId: string[];
+    _id: any;
+    period?: number;
+  }
+
   // export class Address {
   //   line1: string;
   //   line2: string;

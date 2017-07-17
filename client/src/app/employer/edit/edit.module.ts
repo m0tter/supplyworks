@@ -5,13 +5,15 @@ import { MaterialModule } from '@angular/material';
 
 import { EditRoutingModule } from './edit-routing.module';
 import { EditComponent } from './edit.component';
+import { ErrorModule } from '../shared'
 
 @NgModule({
   imports: [
+    ErrorModule,
     CommonModule,
     EditRoutingModule,
     ReactiveFormsModule,
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   declarations: [
     EditComponent
