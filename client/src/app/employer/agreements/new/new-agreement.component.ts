@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AgreementService, EmployerService } from '../../services';
+import { EmployerService } from '../../services';
+import { AgreementService } from '../agreement.service';
 import { UserService } from '../../services';
 import { ErrorService, DebugService } from '../../services';
 import { Agreement, AgreementTypes, User, TableDataSource } from 'types';

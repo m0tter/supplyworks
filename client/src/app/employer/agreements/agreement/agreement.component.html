@@ -1,0 +1,47 @@
+<form class="_form" [formGroup]="_form" (ngSubmit)="doSave($event)">
+  <div>
+  <md-input-container class="name">
+    <input mdInput placeholder="Name" formControlName="name">
+  </md-input-container>
+  <md-select placeholder="Type" formControlName="type">
+    <md-option *ngFor="let t of _typeNames" [value]="t">{{t}}</md-option>
+  </md-select>
+  </div>
+  <div *ngIf="_selectedType === 'FixedPeriod';then fixedPeriod"></div>
+  <ng-template #fixedPeriod>
+    <md-input-container class="input">
+      <input mdInput formControlName="period" placeholder="Period" size="10" />
+    </md-input-container>
+    <md-input-container>
+      <input mdInput formControlName="lessons" placeholder="Lessons" size="10" />
+    </md-input-container>
+    
+      <md-checkbox formControlName="countBreaks"> Count Breaks</md-checkbox>
+      <md-checkbox formControlName="allowOverride"> Allow Override</md-checkbox>
+    
+    <div class="user-table">
+      <md-table #table [dataSource]="_users">
+        <ng-container cdkColumnDef="selected" class="selected-column">
+          <div class="selected-column">
+          <md-header-cell *cdkHeaderCellDef> </md-header-cell>
+          <md-cell *cdkCellDef="let row"> <input type="checkbox" (click)="userSelect(row)" [checked]="row.selected"> </md-cell>
+          </div>
+        </ng-container>
+        <ng-container cdkColumnDef="name">
+          <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
+          <md-cell *cdkCellDef="let row">
+            <div>{{row.firstName}} {{row.lastName}}</div>
+            <div class="user-email">{{row.email}}</div>
+          </md-cell>
+        </ng-container>
+        <md-header-row *cdkHeaderRowDef="['selected', 'name']"></md-header-row>
+        <md-row class="myrow" *cdkRowDef="let row; columns: ['selected', 'name']"></md-row>
+      </md-table>
+    </div>
+  </ng-template>
+   <div class="button-container">
+      <button md-raised-button [disabled]="!_form.valid || _saving || !_form.dirty" color="primary" type="submit">Save</button>
+      <button md-raised-button (click)="doCancel()" type="button" id="btnCancel">Cancel</button>
+      <img *ngIf="_saving" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+    </div>
+</form>

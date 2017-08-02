@@ -38,6 +38,9 @@ declare module 'supplyworks' {
     memberId: string[];
     _id: any;
     period?: number;
+    lessons: number;
+    countBreaks: boolean;
+    allowOverride: boolean;
   }
 
   // export class Address {

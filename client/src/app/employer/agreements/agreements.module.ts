@@ -1,14 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MdTableModule, MdInputModule, MdSelectModule, MdButtonModule } from '@angular/material';
+import {  
+  MdTableModule, 
+  MdInputModule, 
+  MdSelectModule, 
+  MdButtonModule,
+  MdCheckboxModule,
+  MdDialogModule
+} from '@angular/material';
 import { CdkTableModule } from '@angular/cdk';
 
 import { AgreementsRoutingModule } from './agreements-routing.module';
 import { AgreementsComponent } from './agreements.component';
-import { NewAgreementComponent } from './new/new-agreement.component';
 import { ListAgreementsComponent } from './list/list-agreements.component';
+import { AgreementComponent } from './agreement/agreement.component';
+
 import { ErrorModule } from '../shared/error/error.module';
+
+import { AgreementService } from './agreement.service';
 
 @NgModule({
   imports: [
@@ -19,14 +29,16 @@ import { ErrorModule } from '../shared/error/error.module';
     MdInputModule,
     MdSelectModule,
     MdButtonModule,
+    MdCheckboxModule,
+    MdDialogModule,
     AgreementsRoutingModule,
     CdkTableModule
   ],
   declarations: [
     AgreementsComponent,
-    NewAgreementComponent,
-    ListAgreementsComponent
+    ListAgreementsComponent,
+    AgreementComponent
   ],
-  providers: [ ]
+  providers: [ AgreementService ]
 })
 export class AgreementsModule { }

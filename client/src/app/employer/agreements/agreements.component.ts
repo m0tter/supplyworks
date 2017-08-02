@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AgreementService, EmployerService, ErrorService } from '../services';
+import { AgreementService } from './agreement.service';
+import { EmployerService, ErrorService } from '../services';
 import { Agreement, AgreementTypes } from 'types';
 
 @Component({

@@ -65,5 +65,8 @@ export class Agreement implements IAgreement {
   memberId:string[] = new Array();
   employerId:string = null;
   _id:string = null;
-  period?: number = 0;
+  period? = 0;
+  lessons = 0;
+  countBreaks = false;
+  allowOverride = false;
 }

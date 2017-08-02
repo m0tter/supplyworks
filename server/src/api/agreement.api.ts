@@ -22,8 +22,8 @@ export class AgreementAPI {
       TokenCheck(req, res, next);
     })
 
-    this.router.get('/:empId', (req: AuthRequest, res) => {
-      AgreementModel.find({ 'employerId': req.params.empId }, (err:MongoError, docs) => {
+    this.router.get('/', (req: AuthRequest, res) => {
+      AgreementModel.find({ 'employerId': req.token.employerId }, (err:MongoError, docs) => {
         if(err) {
           this.errorHandler(err, res);
         } else {
@@ -35,13 +35,15 @@ export class AgreementAPI {
     this.router.post('/', bpsr.json(), (req: AuthRequest, res) => {
       let agreeNew = req.body as IAgreement;
       let agreeDoc = new AgreementModel;
-      console.log('agreement.api:post:agreeNew = ' + JSON.stringify(agreeNew));
       if(agreeNew && agreeDoc){
         agreeDoc.name = agreeNew.name;
         agreeDoc.employerId = agreeNew.employerId;
         agreeDoc.memberId = agreeNew.memberId;
         agreeDoc.agreementType = agreeNew.agreementType;
         if(agreeNew.period) agreeDoc.period = agreeNew.period;
+        if(agreeNew.lessons) agreeDoc.lessons = agreeNew.lessons;
+        agreeDoc.countBreaks = agreeNew.countBreaks;
+        agreeDoc.allowOverride = agreeNew.allowOverride; 
 
         agreeDoc.save((err, result) => {
           if(err) this.errorHandler(err, res);
@@ -50,6 +52,39 @@ export class AgreementAPI {
           }
         });
       }
+    });
+
+    this.router.put('/:id', bpsr.json(), (req: AuthRequest, res) => {
+      let agree = <IAgreement>req.body;
+      if(agree) {
+        AgreementModel.findByIdAndUpdate(req.params.id, { 
+          $set: { 
+            name: agree.name,
+            period: agree.period,
+            memberId: agree.memberId,
+            lessons: agree.lessons,
+            countBreaks: agree.countBreaks,
+            agreementType: agree.agreementType,
+            allowOverride: agree.allowOverride
+          } 
+        }, (err, doc) => {
+          if(err) this.errorHandler(err, res);
+          else res.status(200).json({'success': true, 'data': doc});
+        });
+      } else res.status(204).json({'success': false, 'data': 'can not update agreement, no ID supplied'});
+    });
+
+    this.router.delete('/:id', (req: AuthRequest, res) => {
+      AgreementModel.findOneAndRemove(req.params.id, (err, doc) => {
+        if(err) { 
+          this.errorHandler(err, res); 
+        } else {
+          if(doc)
+            res.status(200).json({'success': true, 'data': doc});
+          else
+            res.status(200).json({'success': false, 'data': 'no document found to delete'});
+        }
+      });
     });
   }
 
