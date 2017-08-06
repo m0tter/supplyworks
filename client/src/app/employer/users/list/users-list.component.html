@@ -3,7 +3,7 @@
     <span><button type="button" md-raised-button (click)="goHome()">Home</button></span>
     <span><button type="button" md-raised-button (click)="newUser()">New</button></span>
   </div>
-  <div class="datatable">
+  <div class="datatable" *ngIf="_data; else #noItems">
     <md-table #table [dataSource]="_data">
       <ng-container cdkColumnDef="name" class="col-name">
         <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>
@@ -27,6 +27,6 @@
       <md-header-row *cdkHeaderRowDef="['name', 'email', 'mobilePhone', 'actions']"></md-header-row>
       <md-row *cdkRowDef="let row; columns: ['name', 'email', 'mobilePhone', 'actions']"></md-row>
     </md-table>
-    <ng-template #noItems><p>No users to display</p></ng-template>
   </div>
+  <ng-template #noItems><p>No users to display</p></ng-template>
 </div>
