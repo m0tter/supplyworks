@@ -14,22 +14,13 @@ export class UserService {
     private http: Http,
     private _debug: DebugService
   ) { }
-  
-  public getUsers(empId?: string): Promise<User[]> {
-    let url = API_EMPLOYER.user;
-    if(empId) url = `${url}/${empId}`;
-    return this.http.get(url , this.authService.authHeader())
-      .toPromise()
-      .then(res => {
-        let json = res.json();
-        if(json.success)
-          return <User[]>json.data;
-        this.errorHandler(json.data);
-      })
-      .catch(err => this.errorHandler(err)) as Promise<User[]>;
+
+  public getUser(id: string): Observable<User> {
+    return this.getUsers()
+      .map(res => res.find(u => u._id === id));
   }
 
-  public getUsersNew(employerId: string): Observable<User[]> {
+  public getUsers(employerId?: string): Observable<User[]> {
     let url = API_EMPLOYER.user;
     if(employerId) url = `${url}/${employerId}`;
     return this.http.get(url, this.authService.authHeader())
@@ -40,7 +31,23 @@ export class UserService {
       .catch((err: any) => Observable.throw(err.json().error || 'error loading users'));
   }
 
-  public newUser(user:User): Promise<User> {
+  public newUser(user: User): Observable<User> {
+    return this.http.post(API_EMPLOYER.user, user, this.authService.authHeader())
+      .map( res => {
+        let json = res.json();
+        if (json.success) {
+          return json.data;
+        } else {
+          if (json.data && json.data.code) {
+            if (json.data.code === 11000) { Observable.throw('A user with the same email address already exists'); }
+            else { Observable.throw('An unknown error has occurred saving the user, ' + json.data.message); }
+          } else { Observable.throw(json.data); }
+        }
+      })
+      .catch(err => Observable.throw(err));
+  }
+  
+  public newUserOld(user:User): Promise<User> {
     return this.http.post(API_EMPLOYER.user, user, this.authService.authHeader())
       .toPromise()
       .then(res => {
