@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { MdDialog, MdDialogRef } from '@angular/material';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { User, Employer } from 'types';
+import { User, Employer, TableDataSource } from 'types';
 import { UserService } from '../user.service';
 import { EmployerService, ErrorService } from '../../services';
 import { UserDialogComponent } from '../dialogs/user-dialog.component';
@@ -17,22 +18,28 @@ export class ListUsersComponent implements OnInit {
   private _users: User[];
   private _user: User;
   private _error = '';
+  private _data: TableDataSource<User>;
+  private _waiting = false;
 
   constructor(
     private _errorService: ErrorService,
     private _empService: EmployerService,
     private _userService: UserService,
     private _location: Location,
-    private _dialog: MdDialog
+    private _dialog: MdDialog,
+    private _router: Router,
+    private _route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     let id = this._empService.employerId;
+    this._waiting = true;
     if(id) {
-      this._userService.getUsersNew(id)
+      this._userService.getUsers(id)
         .subscribe(
-          res => this._users = res,
-          err => this.errorHandler(err)
+          res => this._data = new TableDataSource<User>(res),
+          err => this.errorHandler(err),
+          () => this._waiting = false
         );
     } else {
       this.errorHandler('Employer ID is missing, unable to retrieve users');
@@ -43,31 +50,8 @@ export class ListUsersComponent implements OnInit {
     this._location.back();
   }
 
-  newUser():void {
-    let dialogRef = this._dialog.open(UserDialogComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      let user = <User>result;
-      if(user) {
-        user.employerId = this._empService.employerId;
-        this._userService.newUser(result)
-          .then(savedUser => this._users.push(savedUser))
-          .catch(err => this.errorHandler(err))
-      }
-    });
-  }
-
-  edit($index:number):void {
-    let copy = JSON.parse(JSON.stringify(this._users[$index]));
-    let dialogRef = this._dialog.open(UserDialogComponent);
-    dialogRef.componentInstance.user = copy;
-    dialogRef.afterClosed().subscribe(result => {
-      let user = <User>result;
-      if(user) {
-        this._userService.editUser(user)
-          .then(result => this._users.splice($index, 1, user))
-          .catch(err => this.errorHandler(err))
-      }
-    });
+  edit(row: User): void {
+    this._router.navigate([`../${row._id}`], { relativeTo: this._route });
   }
 
   delete($idx:number):void {
