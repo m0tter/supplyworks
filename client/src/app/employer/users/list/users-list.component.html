@@ -3,7 +3,7 @@
     <span><button type="button" md-raised-button (click)="goHome()">Home</button></span>
     <span><button type="button" md-raised-button (click)="newUser()">New</button></span>
   </div>
-  <div class="datatable" *ngIf="_data; else #noItems">
+  <div class="datatable" *ngIf="_data; else noItems">
     <md-table #table [dataSource]="_data">
       <ng-container cdkColumnDef="name" class="col-name">
         <md-header-cell *cdkHeaderCellDef> Name </md-header-cell>

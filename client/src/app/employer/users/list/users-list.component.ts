@@ -14,7 +14,7 @@ import { ConfirmDialogComponent } from '../../shared/dialogs/confirm-dialog.comp
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
-export class ListUsersComponent implements OnInit {
+export class UsersListComponent implements OnInit {
   private _users: User[];
   private _user: User;
   private _error = '';

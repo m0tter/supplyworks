@@ -11,12 +11,12 @@ import { Agreement, AgreementTypes } from 'types';
   styleUrls: ['./agreements.component.scss']
 })
 export class AgreementsComponent implements OnInit {
-  private _agreements: Agreement[];
+  // private _agreements: Agreement[];
   private _displayNewAgreement = false;
 
   constructor(
-    private _service: AgreementService,
-    private _empService: EmployerService,
+    // private _service: AgreementService,
+    // private _empService: EmployerService,
     private _errorService: ErrorService,
     private _router: Router,
     private _route: ActivatedRoute
